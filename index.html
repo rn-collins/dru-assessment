@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cannabis Healthcare Education · Impact Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:#2D6A4F;--green-dark:#1B4332;--green-mid:#4A7C59;
+  --green-light:#D8ECD0;--green-xlight:#F0F7ED;
+  --blue:#1B4D8A;--blue-light:#E4EEF9;
+  --amber:#B8842A;--amber-light:#FBF3E4;
+  --bg:#F4F8F4;--ink:#1A2B22;--ink-mid:#3D5A47;--ink-soft:#7A9983;
+  --white:#FFFFFF;--border:rgba(45,106,79,0.14);--border-soft:rgba(45,106,79,0.08);
+  --improve:#2D6A4F;--neutral:#8A9FA3;--concern:#C0392B;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
+.prog-rail{position:fixed;top:0;left:0;right:0;height:3px;background:var(--green-light);z-index:100;}
+.prog-fill{height:100%;background:var(--green);transition:width 0.4s ease;}
+header{background:var(--white);border-bottom:1px solid var(--border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;}
+.hd-org{font-family:'DM Serif Display',serif;font-size:15px;color:var(--green-dark);}
+.hd-badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);background:var(--green-light);padding:4px 10px;border-radius:2px;}
+.screen{display:none;min-height:calc(100vh - 56px);align-items:center;justify-content:center;padding:40px 20px;}
+.screen.active{display:flex;}
+.dash-screen{display:none;min-height:calc(100vh - 56px);padding:40px 20px;}
+.dash-screen.active{display:block;}
+.card{background:var(--white);border:1px solid var(--border-soft);border-radius:6px;padding:36px;max-width:600px;width:100%;}
+.card-sm{max-width:480px;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;}
+.heading{font-family:'DM Serif Display',serif;font-size:clamp(22px,4vw,30px);line-height:1.2;color:var(--ink);margin-bottom:14px;}
+.subhead{font-size:14px;line-height:1.7;color:var(--ink-mid);margin-bottom:20px;}
+.code-input{width:100%;padding:13px 16px;font-family:'DM Mono',monospace;font-size:17px;text-transform:uppercase;letter-spacing:.1em;text-align:center;border:2px solid var(--border);background:var(--bg);color:var(--ink);border-radius:4px;outline:none;margin-bottom:14px;transition:border-color .2s;}
+.code-input:focus{border-color:var(--green);}
+.code-input::placeholder{font-size:12px;letter-spacing:.05em;opacity:.5;text-transform:none;}
+/* DEMOGRAPHICS */
+.demo-section{background:var(--green-xlight);border:1px solid var(--border);border-radius:4px;padding:20px;margin-bottom:20px;}
+.demo-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;}
+.demo-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.demo-select{padding:9px 12px;font-family:'Manrope',sans-serif;font-size:13px;border:1.5px solid var(--border);background:var(--white);color:var(--ink);border-radius:3px;outline:none;width:100%;}
+/* TYPE BUTTONS */
+.type-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.type-btn{padding:18px 14px;border:2px solid var(--border);border-radius:4px;background:var(--white);cursor:pointer;text-align:center;transition:border-color .2s,background .2s;}
+.type-btn:hover,.type-btn.selected{border-color:var(--green);background:var(--green-xlight);}
+.type-btn-label{font-family:'DM Serif Display',serif;font-size:19px;color:var(--green-dark);margin-bottom:3px;}
+.type-btn-sub{font-size:11px;color:var(--ink-soft);line-height:1.4;}
+/* QUESTIONS */
+.q-wrap{max-width:640px;width:100%;}
+.q-meta{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
+.q-subscale{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:2px;}
+.q-subscale.knowledge{background:var(--blue-light);color:var(--blue);}
+.q-subscale.attitude{background:var(--green-light);color:var(--green-dark);}
+.q-subscale.behavior{background:var(--amber-light);color:var(--amber);}
+.q-subscale.outcome{background:#F3EFF9;color:#5D3A9B;}
+.q-dim{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;}
+.q-counter{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink-soft);}
+.q-text{font-family:'DM Serif Display',serif;font-size:clamp(17px,2.5vw,21px);line-height:1.4;color:var(--ink);margin-bottom:24px;}
+.opts{display:flex;flex-direction:column;gap:9px;margin-bottom:28px;}
+.opt-btn{background:var(--white);border:1.5px solid var(--border);border-radius:4px;padding:13px 16px;cursor:pointer;font-size:13px;line-height:1.5;color:var(--ink-mid);text-align:left;transition:border-color .2s,background .2s;}
+.opt-btn:hover{border-color:var(--green);background:var(--green-xlight);}
+.opt-btn.sel{border-color:var(--green);background:var(--green-xlight);color:var(--green-dark);font-weight:600;}
+.q-nav{display:flex;justify-content:space-between;align-items:center;}
+.btn-back{background:none;border:none;font-size:13px;color:var(--ink-soft);cursor:pointer;padding:10px 0;}
+.btn-next{background:var(--green);color:var(--white);font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;padding:11px 26px;border:none;border-radius:4px;cursor:pointer;transition:background .2s,opacity .2s;}
+.btn-next:disabled{opacity:.3;cursor:not-allowed;}
+.btn-next:not(:disabled):hover{background:var(--green-dark);}
+/* RESULT */
+.ty-icon{font-size:44px;margin-bottom:16px;}
+/* DASHBOARD */
+.dash-wrap{max-width:980px;margin:0 auto;}
+.dash-topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:12px;}
+.dash-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--ink);}
+.refresh-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink-soft);letter-spacing:.06em;margin-top:6px;}
+.dash-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+.session-select{padding:9px 12px;font-family:'Manrope',sans-serif;font-size:13px;border:1.5px solid var(--border);background:var(--white);color:var(--ink);border-radius:3px;outline:none;}
+.btn-export{background:none;border:1.5px solid var(--green);color:var(--green);font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;padding:8px 14px;border-radius:3px;cursor:pointer;white-space:nowrap;}
+.btn-export:hover{background:var(--green-xlight);}
+.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--white);border:1px solid var(--border-soft);border-radius:4px;padding:14px;text-align:center;}
+.stat-num{font-family:'DM Serif Display',serif;font-size:30px;color:var(--green-dark);line-height:1;margin-bottom:4px;}
+.stat-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+/* SUBSCALE CARDS */
+.subscale-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px;}
+.subscale-card{background:var(--white);border:1px solid var(--border-soft);border-radius:4px;padding:16px 18px;}
+.subscale-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.subscale-label.knowledge{color:var(--blue);}
+.subscale-label.attitude{color:var(--green-dark);}
+.subscale-label.behavior{color:var(--amber);}
+.subscale-score-row{display:flex;align-items:center;gap:10px;}
+.subscale-pre{font-family:'DM Serif Display',serif;font-size:24px;color:var(--ink-soft);}
+.subscale-arr{font-size:14px;color:var(--ink-soft);}
+.subscale-post{font-family:'DM Serif Display',serif;font-size:24px;color:var(--green);}
+.subscale-delta{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;padding:2px 7px;border-radius:2px;}
+.subscale-delta.pos{background:var(--green-xlight);color:var(--green-dark);}
+.subscale-delta.neg{background:#FBE9E6;color:#C0392B;}
+.subscale-delta.zero{background:var(--bg);color:var(--ink-soft);}
+/* CALLOUT */
+.callout{background:var(--green-dark);color:var(--white);border-radius:6px;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.callout-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:3px;}
+.callout-val{font-family:'DM Serif Display',serif;font-size:20px;}
+.callout-divider{width:1px;height:36px;background:rgba(255,255,255,.2);}
+.section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:10px;margin-top:22px;}
+.delta-table{display:flex;flex-direction:column;gap:8px;}
+.delta-row{background:var(--white);border:1px solid var(--border-soft);border-radius:4px;padding:16px 20px;}
+.delta-q{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.4;}
+.delta-subscale-tag{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;margin-right:8px;padding:2px 6px;border-radius:2px;}
+.delta-subscale-tag.knowledge{background:var(--blue-light);color:var(--blue);}
+.delta-subscale-tag.attitude{background:var(--green-light);color:var(--green-dark);}
+.delta-subscale-tag.behavior{background:var(--amber-light);color:var(--amber);}
+.delta-bars{display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.delta-bar-group{flex:1;min-width:100px;}
+.delta-bar-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;display:flex;justify-content:space-between;}
+.delta-bar-rail{height:5px;background:var(--green-light);border-radius:3px;overflow:hidden;}
+.delta-bar-fill{height:100%;border-radius:3px;transition:width .8s ease;}
+.delta-change{font-family:'DM Serif Display',serif;font-size:22px;flex-shrink:0;min-width:60px;text-align:right;}
+.resp-table{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--border-soft);border-radius:4px;overflow:hidden;font-size:11px;}
+.resp-table th{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);padding:9px 11px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg);}
+.resp-table td{padding:9px 11px;border-bottom:1px solid var(--border-soft);color:var(--ink-mid);vertical-align:middle;}
+.resp-row{cursor:pointer;transition:background .15s;}
+.resp-row:hover{background:var(--green-xlight);}
+.resp-row.expanded{background:var(--green-xlight);}
+.detail-row{display:none;}
+.detail-row.open{display:table-row;}
+.detail-cell{padding:0 11px 14px;background:var(--green-xlight);}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;padding-top:10px;}
+.detail-item{background:var(--white);border:1px solid var(--border);border-radius:3px;padding:10px 12px;}
+.detail-q{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:3px;}
+.detail-a{font-size:12px;color:var(--ink);line-height:1.4;}
+.score-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:3px;vertical-align:middle;}
+.type-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:2px;}
+.type-badge.pre{background:var(--blue-light);color:var(--blue);}
+.type-badge.post{background:var(--green-light);color:var(--green-dark);}
+.type-badge.followup{background:var(--amber-light);color:var(--amber);}
+.btn-dl-row{background:none;border:1px solid var(--border);color:var(--ink-soft);font-size:10px;padding:3px 7px;border-radius:2px;cursor:pointer;}
+.btn-dl-row:hover{border-color:var(--green);color:var(--green);}
+.btn-primary{background:var(--green);color:var(--white);font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;padding:12px 24px;border:none;border-radius:4px;cursor:pointer;transition:background .2s;width:100%;}
+.btn-primary:hover{background:var(--green-dark);}
+.login-input{width:100%;padding:12px 14px;font-family:'DM Mono',monospace;font-size:14px;border:1.5px solid var(--border);background:var(--bg);color:var(--ink);border-radius:3px;outline:none;margin-bottom:10px;letter-spacing:.06em;transition:border-color .2s;}
+.login-input:focus{border-color:var(--green);}
+.err-msg{background:#FBE9E6;border:1px solid #C24A2E;border-radius:3px;padding:10px 14px;font-size:12px;color:#C24A2E;margin-top:8px;display:none;}
+.loading{text-align:center;padding:40px;color:var(--ink-soft);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;}
+.attribution{text-align:center;padding:18px;font-size:11px;color:var(--ink-soft);border-top:1px solid var(--border);}
+.attribution a{color:var(--green);text-decoration:none;}
+@media(max-width:700px){
+  .stat-row{grid-template-columns:repeat(3,1fr);}
+  .subscale-row{grid-template-columns:1fr;}
+  .dash-screen{padding:24px 14px;}
+  .card{padding:24px;}
+  .delta-bars{flex-direction:column;gap:8px;}
+  .callout{flex-direction:column;gap:10px;}
+  .callout-divider{display:none;}
+}
+
+/* RESEARCHER ONLY */
+.researcher-badge { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; background:#1B4D8A; color:#fff; padding:3px 9px; border-radius:2px; margin-left:10px; }
+.researcher-section { display:none; }
+.researcher-section.visible { display:block; }
+.demo-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
+.demo-card { background:var(--white); border:1px solid var(--border-soft); border-radius:4px; padding:14px; }
+.demo-card-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px; }
+.demo-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:11px; color:var(--ink-mid); }
+.demo-bar-fill { height:4px; background:var(--green); border-radius:2px; }
+.notes-area { width:100%; padding:10px 12px; font-family:'Manrope',sans-serif; font-size:13px; border:1.5px solid var(--border); border-radius:4px; resize:vertical; min-height:80px; outline:none; transition:border-color .2s; }
+.notes-area:focus { border-color:var(--green); }
+.notes-saved { font-family:'DM Mono',monospace; font-size:10px; color:var(--green); margin-top:4px; display:none; }
+.quality-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+.quality-card { background:var(--white); border:1px solid var(--border-soft); border-radius:4px; padding:12px 16px; flex:1; min-width:140px; }
+.quality-val { font-family:'DM Serif Display',serif; font-size:24px; color:var(--green-dark); margin-bottom:3px; }
+.quality-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+@media(max-width:700px){ .demo-grid{grid-template-columns:repeat(2,1fr);} }
+
+/* BENCHMARK + PUBLICATION READINESS */
+.bench-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:8px; }
+.bench-card { background:var(--white); border:1px solid var(--border-soft); border-radius:4px; padding:14px 16px; }
+.bench-source { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px; }
+.bench-stat { font-family:'DM Serif Display',serif; font-size:22px; color:var(--green-dark); line-height:1; margin-bottom:4px; }
+.bench-label { font-size:11px; color:var(--ink-mid); line-height:1.4; margin-bottom:6px; }
+.bench-tour { font-family:'DM Mono',monospace; font-size:10px; color:var(--green); }
+.pub-grid { display:flex; flex-direction:column; gap:6px; margin-bottom:8px; }
+.pub-row { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--white); border:1px solid var(--border-soft); border-radius:3px; font-size:12px; }
+.pub-check { font-size:14px; flex-shrink:0; width:18px; }
+.pub-label { flex:1; color:var(--ink-mid); }
+.pub-val { font-family:'DM Mono',monospace; font-size:11px; color:var(--ink-soft); }
+.study-ref { background:var(--blue-light); border:1px solid rgba(27,77,138,.15); border-radius:4px; padding:14px 16px; margin-bottom:8px; font-size:12px; line-height:1.6; color:var(--ink-mid); }
+.study-ref strong { color:var(--blue); }
+.ia-gap { background:var(--white); border:1px solid var(--border-soft); border-radius:4px; padding:16px 20px; margin-bottom:8px; }
+.ia-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.ia-block { text-align:center; flex:1; }
+.ia-val { font-family:'DM Serif Display',serif; font-size:28px; line-height:1; margin-bottom:4px; }
+.ia-lbl { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+.ia-arrow { font-size:24px; color:var(--ink-soft); flex-shrink:0; }
+@media(max-width:700px){ .bench-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="prog-rail"><div class="prog-fill" id="prog"></div></div>
+<header>
+  <div class="hd-org">Project Destigmatized Healthcare</div>
+  <div class="hd-badge">Cannabis Education · Impact Assessment</div>
+</header>
+
+<!-- ENTRY -->
+<div class="screen active" id="s-entry">
+  <div class="card">
+    <p class="eyebrow">Cannabis Healthcare Visibility</p>
+    <h1 class="heading">Education Impact Assessment</h1>
+    <p class="subhead">Completely anonymous. Enter the session code provided at your event, share a little context, then choose whether you are taking this before or after the session.</p>
+    <input type="text" class="code-input" id="sessionCode" placeholder="Session code (e.g. BOS-JUN2026)" maxlength="20">
+    <div class="err-msg" id="codeError">Please enter the session code provided at your event.</div>
+
+    <div class="demo-section">
+      <div class="demo-label">Help us understand your context (optional — for research only)</div>
+      <div class="demo-row">
+        <select class="demo-select" id="d_legal">
+          <option value="">Cannabis legal status in your state</option>
+          <option value="fully_legal">Fully legal (recreational + medical)</option>
+          <option value="medical_only">Medical only</option>
+          <option value="decriminalized">Decriminalized</option>
+          <option value="not_legal">Not legal</option>
+          <option value="unsure">Not sure</option>
+        </select>
+        <select class="demo-select" id="d_age">
+          <option value="">Your age group</option>
+          <option value="18_34">18–34</option>
+          <option value="35_54">35–54</option>
+          <option value="55_64">55–64</option>
+          <option value="65_plus">65+</option>
+          <option value="prefer_not">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="demo-row">
+        <select class="demo-select" id="d_meds">
+          <option value="">How many medications do you take regularly?</option>
+          <option value="none">None</option>
+          <option value="1_4">1–4</option>
+          <option value="5_9">5–9 (polypharmacy range)</option>
+          <option value="10_plus">10 or more</option>
+        </select>
+        <select class="demo-select" id="d_race">
+          <option value="">Race / ethnicity</option>
+          <option value="white">White / European American</option>
+          <option value="black">Black / African American</option>
+          <option value="hispanic">Hispanic / Latino/a/x</option>
+          <option value="asian">Asian / Asian American</option>
+          <option value="native">Native American / Alaska Native</option>
+          <option value="pacific">Pacific Islander</option>
+          <option value="multiracial">Multiracial</option>
+          <option value="other">Other</option>
+          <option value="prefer_not">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="demo-row">
+        <select class="demo-select" id="d_region">
+          <option value="">U.S. region</option>
+          <option value="northeast">Northeast</option>
+          <option value="southeast">Southeast</option>
+          <option value="midwest">Midwest</option>
+          <option value="south">South</option>
+          <option value="southwest">Southwest</option>
+          <option value="west_coast">West Coast</option>
+          <option value="hawaii_alaska">Hawaii / Alaska</option>
+          <option value="outside_us">Outside U.S.</option>
+          <option value="prefer_not">Prefer not to say</option>
+        </select>
+        <select class="demo-select" id="d_condition">
+          <option value="">Primary reason for cannabis use</option>
+          <option value="pain">Pain management</option>
+          <option value="oncology">Cancer / treatment support</option>
+          <option value="mental_health">Mental health</option>
+          <option value="epilepsy">Epilepsy / seizure</option>
+          <option value="sleep">Sleep</option>
+          <option value="general_wellness">General wellness</option>
+          <option value="recreational">Recreational / social</option>
+          <option value="caregiver">Caregiver (for someone else)</option>
+          <option value="prefer_not">Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+
+    <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;text-align:center;">Which assessment are you taking?</p>
+    <div class="type-row">
+      <div class="type-btn" id="typePreBtn" onclick="selectType('pre')">
+        <div class="type-btn-label">Pre</div>
+        <div class="type-btn-sub">Before the educational session</div>
+      </div>
+      <div class="type-btn" id="typePostBtn" onclick="selectType('post')">
+        <div class="type-btn-label">Post</div>
+        <div class="type-btn-sub">After the educational session</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="startSurvey()">Begin →</button>
+  </div>
+</div>
+
+<!-- FOLLOW-UP ENTRY -->
+<div class="screen" id="s-followup-entry">
+  <div class="card card-sm">
+    <p class="eyebrow">3-Month Follow-Up</p>
+    <h2 class="heading">How did things go?</h2>
+    <p class="subhead">5 short questions about what happened after your session. Enter the same session code you used before.</p>
+    <input type="text" class="code-input" id="followupCode" placeholder="Your session code" maxlength="20">
+    <div class="err-msg" id="followupError">Please enter your session code.</div>
+    <button class="btn-primary" onclick="startFollowup()">Begin Follow-Up →</button>
+  </div>
+</div>
+
+<!-- QUESTIONS -->
+<div class="screen" id="s-question">
+  <div class="q-wrap">
+    <div class="q-meta">
+      <span class="q-subscale" id="qSubscale"></span>
+      <span class="q-counter" id="qCount"></span>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div class="opts" id="qOpts"></div>
+    <div class="q-nav">
+      <button class="btn-back" id="btnBack" onclick="prevQ()">← Back</button>
+      <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU -->
+<div class="screen" id="s-thankyou">
+  <div class="card card-sm" style="text-align:center;">
+    <div class="ty-icon">🌿</div>
+    <p class="eyebrow">Response recorded</p>
+    <h2 class="heading">Thank you.</h2>
+    <p class="subhead">Your anonymous response contributes to the national data on cannabis healthcare visibility.</p>
+    <p style="font-size:12px;color:var(--ink-soft);line-height:1.6;">Dru Ledbetter's tour is building the research foundation for safer cannabis integration in healthcare. You're part of that.</p>
+    <p style="font-size:11px;color:var(--ink-soft);margin-top:16px;font-family:'DM Mono',monospace;letter-spacing:.06em;">FOLLOW-UP: In 1–3 months, return to this site at<br>dru-assessment.vercel.app?followup<br>to complete a short 5-question follow-up.</p>
+    <p style="font-size:11px;color:var(--ink-soft);margin-top:12px;line-height:1.6;">Looking for cannabis drug interaction information for your provider? Free clinician resource: <a href="https://www.CANN-DIR.psu.edu" target="_blank" style="color:var(--green);">CANN-DIR.psu.edu</a> (Penn State)</p>
+  </div>
+</div>
+
+<!-- FOLLOW-UP THANK YOU -->
+<div class="screen" id="s-followup-thankyou">
+  <div class="card card-sm" style="text-align:center;">
+    <div class="ty-icon">✅</div>
+    <p class="eyebrow">Follow-up recorded</p>
+    <h2 class="heading">Thank you.</h2>
+    <p class="subhead">Your follow-up response helps complete the research picture. This data shows whether education led to real behavior change — which is what makes the research publishable.</p>
+  </div>
+</div>
+
+<!-- DASHBOARD LOGIN -->
+<div class="screen" id="s-dash-login">
+  <div class="card card-sm">
+    <p class="eyebrow">Researcher Dashboard</p>
+    <h2 class="heading">View Session Data</h2>
+    <p class="subhead" style="margin-bottom:18px;">Enter your dashboard access key to view pre/post assessment results, subscale analytics, and follow-up data.</p>
+    <input type="password" class="login-input" id="dashKey" placeholder="Dashboard access key" onkeydown="if(event.key==='Enter')loadDashboard()">
+    <div class="err-msg" id="dashError">Incorrect access key. Please try again.</div>
+    <button class="btn-primary" style="margin-top:10px;" onclick="loadDashboard()">Access Dashboard →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dash-screen" id="s-dashboard">
+  <div class="dash-wrap">
+    <div class="dash-topbar">
+      <div>
+        <p class="eyebrow">Project Destigmatized Healthcare</p>
+        <h2 class="dash-title">Pre/Post Impact Report<span class="researcher-badge" id="researcherBadge" style="display:none">Researcher View</span></h2>
+        <div id="refreshNote" class="refresh-note"></div>
+      </div>
+    </div>
+    <div class="dash-controls">
+      <select class="session-select" id="sessionSelect" onchange="renderDashboard()">
+        <option value="all">All Sessions Combined</option>
+      </select>
+      <button class="btn-export" onclick="exportCSV('pre')">↓ Pre CSV</button>
+      <button class="btn-export" onclick="exportCSV('post')">↓ Post CSV</button>
+      <button class="btn-export" onclick="exportCSV('all')">↓ All CSV</button>
+      <button class="btn-export" onclick="exportCSV('followup')" style="border-color:var(--amber);color:var(--amber);">↓ Follow-Up CSV</button>
+      <button class="btn-export" id="matchedPairsBtn" onclick="exportMatchedPairs()" style="display:none;border-color:#5D3A9B;color:#5D3A9B;">↓ Matched Pairs</button>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-num" id="sTotal">—</div><div class="stat-label">Total Responses</div></div>
+      <div class="stat-card"><div class="stat-num" id="sPre">—</div><div class="stat-label">Pre-Assessment</div></div>
+      <div class="stat-card"><div class="stat-num" id="sPost">—</div><div class="stat-label">Post-Assessment</div></div>
+      <div class="stat-card"><div class="stat-num" id="sFollowup">—</div><div class="stat-label">Follow-Ups</div></div>
+      <div class="stat-card"><div class="stat-num" id="sCompletion">—</div><div class="stat-label">Post Completion</div></div>
+    </div>
+    <div id="dashMain"><div class="loading">Loading session data...</div></div>
+  </div>
+</div>
+
+
+  <!-- RESEARCHER ONLY SECTIONS -->
+  <div class="researcher-section" id="researcherSections">
+
+    <p class="section-label" style="margin-top:28px;">Session Notes <span style="font-size:9px;color:var(--ink-soft);font-family:'Manrope',sans-serif;font-weight:400;text-transform:none;letter-spacing:0;">(private — saved to this browser)</span></p>
+    <div id="sessionNotesContainer" style="background:var(--white);border:1px solid var(--border-soft);border-radius:4px;padding:20px;margin-bottom:20px;">
+      <p style="font-size:13px;color:var(--ink-soft);">Select a session from the filter above to add private notes.</p>
+    </div>
+
+    <p class="section-label" style="margin-top:28px;">Demographic Breakdown <span style="font-size:9px;color:var(--ink-soft);font-family:'Manrope',sans-serif;font-weight:400;text-transform:none;letter-spacing:0;">(pre-assessment only)</span></p>
+    <div id="demoBreakdown" class="demo-grid"></div>
+
+    <p class="section-label" style="margin-top:4px;">Session Quality</p>
+    <div id="qualityPanel" class="quality-row"></div>
+
+    <p class="section-label" style="margin-top:22px;">Benchmark Comparisons <span style="font-size:9px;color:var(--ink-soft);font-family:'Manrope',sans-serif;font-weight:400;text-transform:none;letter-spacing:0;">(your tour data vs published baselines)</span></p>
+    <div id="benchmarkPanel"></div>
+
+    <p class="section-label" style="margin-top:22px;">Comparable Published Study</p>
+    <div class="study-ref">
+      <strong>Jacques et al. (2025) — "Ask Your Provider About Cannabis"</strong><br>
+      NP continuing-education study · n=289 pre/post · n=184 at 3-month follow-up · BMC Public Health<br>
+      Closest methodological template to Dru's tour design. Primary finding: significant knowledge gain post-session; 3-month follow-up showed retained improvement. This is what journal reviewers will compare your submission against.<br>
+      <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--blue);">Your design advantage: multi-site national tour · 3-subscale scoring · behavior + follow-up · demographic covariates</span>
+    </div>
+
+    <p class="section-label" style="margin-top:22px;">Intention → Action Gap</p>
+    <div id="intentionActionPanel" class="ia-gap"><p style="font-size:13px;color:var(--ink-soft);">Requires post + follow-up data.</p></div>
+
+    <p class="section-label" style="margin-top:22px;">Publication Readiness</p>
+    <div id="pubReadinessPanel" class="pub-grid"></div>
+
+  </div>
+<div class="attribution">
+  Built by <a href="mailto:collins.ra@northeastern.edu" onclick="navigator.clipboard.writeText('collins.ra@northeastern.edu')">Aloha AI Consulting</a> · <a href="mailto:collins.ra@northeastern.edu" onclick="navigator.clipboard.writeText('collins.ra@northeastern.edu')" style="color:var(--green);">Contact the Architect</a> for Project Destigmatized Healthcare · Anonymous · No personal information collected
+</div>
+
+<script>
+// ─── QUESTION DATA ────────────────────────────────────────────────────────
+const PRE_QUESTIONS = [
+  // KNOWLEDGE SUBSCALE
+  { subscale:'knowledge', dim:'Knowledge', key:'drug_interactions',
+    text:'Cannabis can affect how certain medications work in the body — particularly blood thinners like warfarin, seizure medications like clobazam and valproate, and transplant drugs like tacrolimus. How cannabis is used also matters: smoking activates different metabolic pathways (CYP1A1/2) than edibles or sublingual oils.',
+    opts:[{text:'True — I knew about these drug classes and that route of use matters',score:3},{text:'True — but I wasn\'t aware of these specific medications before today',score:2},{text:'I\'m not sure',score:1},{text:'False — I don\'t think this is accurate',score:0}]},
+  { subscale:'knowledge', dim:'Knowledge', key:'documentation_awareness',
+    text:'If you disclose cannabis use to a healthcare provider, it may be recorded in your medical record under a behavioral disorder code — even if your use is therapeutic or you live in a legal state.',
+    opts:[{text:'True — I was aware of this',score:3},{text:'True — but I didn\'t know this before today',score:2},{text:'I\'m not sure',score:1},{text:'False — therapeutic use would be documented differently',score:0}]},
+  { subscale:'knowledge', dim:'Knowledge', key:'nondisclosure_risk',
+    text:'When patients don\'t disclose cannabis use to a healthcare provider, it can directly affect the safety of their care — including medication interactions, anesthesia risk, and treatment decisions.',
+    opts:[{text:'Strongly agree',score:3},{text:'Agree',score:2},{text:'Disagree',score:1},{text:'Strongly disagree',score:0}]},
+  { subscale:'knowledge', dim:'Knowledge', key:'product_literacy',
+    text:'The risks and effects of cannabis can vary significantly based on how it\'s used — smoked, eaten, or taken as oil — and what it contains, including the ratio of THC to CBD and the potency.',
+    opts:[{text:'True — I understand these differences and their health implications',score:3},{text:'True — but I\'m still learning what they mean for my health',score:2},{text:'I\'m somewhat aware but uncertain about the details',score:1},{text:'False — or I have no understanding of these differences',score:0}]},
+  { subscale:'knowledge', dim:'Knowledge', key:'polypharmacy',
+    text:'People taking five or more medications regularly may face greater risks from cannabis drug interactions and should be especially careful to tell their healthcare provider.',
+    opts:[{text:'True — and I understand why this group faces higher risk',score:3},{text:'True — but I hadn\'t thought about this before',score:2},{text:'I\'m not sure',score:1},{text:'False — I don\'t think the number of medications matters',score:0}]},
+  { subscale:'knowledge', dim:'Knowledge', key:'system_readiness',
+    text:'Healthcare systems are currently well-prepared to safely integrate cannabis into patient care.',
+    opts:[{text:'Strongly disagree — healthcare is not prepared',score:3},{text:'Disagree — significant gaps exist',score:2},{text:'Agree — mostly prepared',score:1},{text:'Strongly agree — systems are ready',score:0}]},
+
+  // ATTITUDE SUBSCALE
+  { subscale:'attitude', dim:'Attitude', key:'disclosure_comfort',
+    text:'How comfortable do you feel discussing cannabis use with a healthcare provider?',
+    opts:[{text:'Very comfortable',score:3},{text:'Somewhat comfortable',score:2},{text:'Somewhat uncomfortable',score:1},{text:'Very uncomfortable',score:0}]},
+  { subscale:'attitude', dim:'Attitude', key:'provider_response',
+    text:'If you disclosed cannabis use, your healthcare provider would respond without judgment or change in how they treat you.',
+    opts:[{text:'Strongly agree — I feel safe disclosing',score:3},{text:'Agree — they would likely be supportive',score:2},{text:'Disagree — I expect some judgment',score:1},{text:'Strongly disagree — stigma or changed treatment is likely',score:0}]},
+  { subscale:'attitude', dim:'Attitude', key:'racial_cultural_factors',
+    text:'In healthcare settings, patients from some racial, ethnic, or cultural backgrounds face greater stigma or risk when disclosing cannabis use than others.',
+    opts:[{text:'Strongly agree — this reflects my own experience or community',score:3},{text:'Agree — research and what I\'ve observed supports this',score:2},{text:'I\'m unsure',score:1},{text:'Disagree — background doesn\'t affect this',score:0}]},
+  { subscale:'attitude', dim:'Attitude', key:'care_setting_context',
+    text:'The type of healthcare setting — primary care, before surgery, the emergency room, telehealth, or pharmacy — affects how comfortable patients feel disclosing cannabis use.',
+    opts:[{text:'Strongly agree',score:3},{text:'Agree',score:2},{text:'Disagree',score:1},{text:'Strongly disagree — all settings feel the same',score:0}]},
+  { subscale:'attitude', dim:'Attitude', key:'provider_type_comfort',
+    text:'Different healthcare providers — physicians, pharmacists, nurses, and nurse practitioners — have different levels of training and comfort when it comes to cannabis counseling.',
+    opts:[{text:'Strongly agree',score:3},{text:'Agree',score:2},{text:'Disagree',score:1},{text:'Strongly disagree',score:0}]},
+
+  // BEHAVIOR SUBSCALE
+  { subscale:'behavior', dim:'Behavior', key:'past_disclosure',
+    text:'In the past year, have you disclosed cannabis use to a healthcare provider?',
+    opts:[{text:'Yes — proactively, without being asked',score:3},{text:'Yes — when directly asked',score:2},{text:'No — but I would if asked directly',score:1},{text:'No — and I wouldn\'t feel safe doing so',score:0}]},
+  { subscale:'behavior', dim:'Behavior', key:'caregiver_disclosure',
+    text:'If you help manage a family member\'s care — a child, elderly parent, or spouse — how comfortable would you feel disclosing their cannabis use to their healthcare provider on their behalf?',
+    opts:[{text:'Very comfortable',score:3},{text:'Somewhat comfortable',score:2},{text:'Not comfortable',score:1},{text:'Not applicable — I don\'t help manage anyone\'s care',score:2}]},
+  { subscale:'behavior', dim:'Behavior', key:'documentation_concern',
+    text:'Concerns about how cannabis use would be documented in a medical record have affected willingness to disclose it to a healthcare provider.',
+    opts:[{text:'Strongly disagree — documentation hasn\'t been a barrier',score:3},{text:'Somewhat disagree',score:2},{text:'Somewhat agree — this makes me hesitate',score:1},{text:'Strongly agree — documentation concerns have stopped me from disclosing',score:0}]}
+];
+
+const POST_EXTRA = [
+  { subscale:'outcome', dim:'Outcome', key:'session_impact',
+    text:'This educational session changed my understanding of cannabis and healthcare.',
+    opts:[{text:'Strongly agree',score:3},{text:'Agree',score:2},{text:'No significant change',score:1},{text:'Disagree',score:0}]},
+  { subscale:'outcome', dim:'Outcome', key:'disclosure_intent',
+    text:'After this session, I am more likely to disclose cannabis use to a healthcare provider.',
+    opts:[{text:'Yes — I will do this',score:3},{text:'Probably yes',score:2},{text:'No change in my intention',score:1},{text:'N/A — I don\'t use cannabis',score:2}]},
+  { subscale:'outcome', dim:'Outcome', key:'pharmacist_intent',
+    text:'I plan to speak with my pharmacist or doctor about potential cannabis drug interactions.',
+    opts:[{text:'Yes — soon',score:3},{text:'Yes — at some point',score:2},{text:'Probably not',score:1},{text:'N/A',score:2}]},
+  { subscale:'outcome', dim:'Confidence', key:'disclosure_confidence',
+    text:'How confident are you that you could tell a healthcare provider about your cannabis use if you wanted to?',
+    opts:[{text:'Very confident',score:3},{text:'Somewhat confident',score:2},{text:'Not very confident',score:1},{text:'Not confident at all',score:0}]},
+  { subscale:'outcome', dim:'Motivation', key:'disclosure_importance',
+    text:'After this session, how important is it to you to disclose cannabis use to your healthcare provider?',
+    opts:[{text:'Very important — I see this as a health priority',score:3},{text:'Somewhat important',score:2},{text:'Not very important',score:1},{text:'Not important at all',score:0}]},
+  { subscale:'outcome', dim:'Barriers', key:'disclosure_barriers',
+    text:'What, if anything, still stops you from disclosing cannabis use to a healthcare provider?',
+    opts:[{text:'Nothing stops me now — I\'m ready',score:3},{text:'I need more information or time to feel ready',score:2},{text:'I\'m still concerned about stigma or judgment',score:1},{text:'I\'m still worried about documentation or legal consequences',score:0}]},
+  { subscale:'outcome', dim:'Readiness', key:'ttm_stage',
+    text:'Where are you right now in your readiness to tell a healthcare provider about cannabis use?',
+    opts:[{text:'I already do this regularly',score:3},{text:'I plan to at my next appointment',score:2},{text:'I\'m thinking about it but haven\'t decided',score:1},{text:'I\'m not considering this right now',score:0}]}
+];
+
+const FOLLOWUP_QUESTIONS = [
+  { subscale:'followup', dim:'Behavior', key:'fu_disclosed',
+    text:'Since your educational session, have you disclosed cannabis use to any healthcare provider?',
+    opts:[{text:'Yes — and it went well',score:3},{text:'Yes — the response was neutral or mixed',score:2},{text:'Not yet, but I plan to',score:1},{text:'No — I decided not to',score:0}]},
+  { subscale:'followup', dim:'Documentation', key:'fu_documentation',
+    text:'Were you asked about or told about how cannabis use would be documented in your medical record?',
+    opts:[{text:'Yes — and it was handled well',score:3},{text:'Yes — but it wasn\'t clear or comfortable',score:2},{text:'No — it wasn\'t discussed',score:1},{text:'N/A',score:2}]},
+  { subscale:'followup', dim:'Pharmacist', key:'fu_pharmacist',
+    text:'Have you spoken with a pharmacist or doctor about cannabis drug interactions since the session?',
+    opts:[{text:'Yes — it was helpful',score:3},{text:'Yes — but they had limited information',score:2},{text:'No — but I plan to',score:1},{text:'No — this hasn\'t been a priority',score:0}]},
+  { subscale:'followup', dim:'Comfort Change', key:'fu_comfort_change',
+    text:'Compared to before the educational session, how has your comfort with disclosing cannabis use changed?',
+    opts:[{text:'Much more comfortable',score:3},{text:'Somewhat more comfortable',score:2},{text:'About the same',score:1},{text:'Less comfortable',score:0}]},
+  { subscale:'followup', dim:'Remaining Barriers', key:'fu_barriers_remaining',
+    text:'What barriers, if any, remain to disclosing cannabis use to your healthcare provider?',
+    opts:[{text:'None — I\'m fully comfortable disclosing',score:3},{text:'Some — mainly practical (timing, finding the right moment)',score:2},{text:'Some — still concerns about documentation',score:1},{text:'Significant — stigma or fear still prevents me',score:0}]}
+];
+
+const ALL_PRE_KEYS = PRE_QUESTIONS.map(q=>q.key);
+
+const SCORE_LABELS = {
+  drug_interactions:{3:'Knew specific drug classes',2:'Correct, newly learned',1:'Unsure',0:'Incorrect'},
+  documentation_awareness:{3:'Knew about disorder coding',2:'Correct, newly learned',1:'Unsure',0:'Incorrect'},
+  nondisclosure_risk:{3:'Strongly agree',2:'Agree',1:'Disagree',0:'Strongly disagree'},
+  product_literacy:{3:'Understands differences',2:'Correct, still learning',1:'Partially aware',0:'No awareness'},
+  polypharmacy:{3:'Understands polypharmacy risk',2:'Correct, newly learned',1:'Unsure',0:'Incorrect'},
+  system_readiness:{3:'Not prepared (accurate)',2:'Gaps exist (accurate)',1:'Mostly prepared',0:'Fully ready (inaccurate)'},
+  disclosure_comfort:{3:'Very comfortable',2:'Somewhat comfortable',1:'Somewhat uncomfortable',0:'Very uncomfortable'},
+  provider_response:{3:'Strongly agree (no stigma)',2:'Agree',1:'Disagree',0:'Strongly disagree (stigma common)'},
+  racial_cultural_factors:{3:'Strongly agree (experienced)',2:'Agree',1:'Unsure',0:'Disagree'},
+  care_setting_context:{3:'Strongly agree',2:'Agree',1:'Disagree',0:'Strongly disagree'},
+  provider_type_comfort:{3:'Strongly agree (aware of gaps)',2:'Agree',1:'Disagree',0:'Strongly disagree'},
+  past_disclosure:{3:'Yes — proactively',2:'Yes — when asked',1:'No — but would',0:'No — not safe'},
+  caregiver_disclosure:{3:'Very comfortable',2:'Somewhat / N/A',1:'Not comfortable',0:'Not comfortable'},
+  documentation_concern:{3:'Not a barrier',2:'Somewhat disagree',1:'Makes me hesitate',0:'Has stopped disclosure'},
+  session_impact:{3:'Strongly agree',2:'Agree',1:'No change',0:'Disagree'},
+  disclosure_intent:{3:'Yes — will disclose',2:'Probably / N/A',1:'No change',0:'No change'},
+  pharmacist_intent:{3:'Yes — soon',2:'Eventually / N/A',1:'Probably not',0:'Probably not'},
+  disclosure_confidence:{3:'Very confident',2:'Somewhat confident',1:'Not very confident',0:'Not confident'},
+  disclosure_importance:{3:'Very important',2:'Somewhat important',1:'Not very important',0:'Not important'},
+  disclosure_barriers:{3:'Nothing stops me',2:'Need more time/info',1:'Stigma concern remains',0:'Documentation/legal fear'},
+  ttm_stage:{3:'Already disclosing',2:'Planning at next appt',1:'Thinking about it',0:'Not considering'},
+  fu_disclosed:{3:'Yes — went well',2:'Yes — mixed',1:'Planning to',0:'Decided not to'},
+  fu_documentation:{3:'Handled well',2:'Mixed/unclear',1:'Not discussed',0:'N/A'},
+  fu_pharmacist:{3:'Yes — helpful',2:'Yes — limited info',1:'Planning to',0:'Not a priority'},
+  fu_comfort_change:{3:'Much more comfortable',2:'Somewhat more comfortable',1:'About the same',0:'Less comfortable'},
+  fu_barriers_remaining:{3:'None — fully comfortable',2:'Practical only',1:'Documentation concern',0:'Stigma/fear remains'},
+};
+
+const SCORE_COLOR = s => s>=3?'#2D6A4F':s===2?'#4A7C59':s===1?'#B8842A':'#C0392B';
+const SUBSCALE_KEYS = {
+  knowledge: ['drug_interactions','documentation_awareness','nondisclosure_risk','product_literacy','polypharmacy','system_readiness'],
+  attitude:  ['disclosure_comfort','provider_response','racial_cultural_factors','care_setting_context','provider_type_comfort'],
+  behavior:  ['past_disclosure','caregiver_disclosure','documentation_concern']
+};
+
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let sessionCode='',assessmentType='',currentQ=0,answers=[],questions=[],demographics={
+    legal_status: document.getElementById('d_legal').value||'not_provided',
+    age_group:    document.getElementById('d_age').value||'not_provided',
+    medications:  document.getElementById('d_meds').value||'not_provided',
+    race:         document.getElementById('d_race').value||'not_provided',
+    region:       document.getElementById('d_region').value||'not_provided',
+    condition:    document.getElementById('d_condition').value||'not_provided'
+  };
+let allData={pre:[],post:[],followup:[],sessions:[]};
+let refreshInterval=null,refreshSecs=0,dashKey='';
+let isFollowup=false;
+
+// ─── ROUTING ─────────────────────────────────────────────────────────────────
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.dash-screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0});
+}
+
+window.onload=()=>{
+  const search=window.location.search;
+  if(search.includes('dashboard')){show('s-dash-login');document.getElementById('prog').style.width='0';}
+  else if(search.includes('followup')){show('s-followup-entry');document.getElementById('prog').style.width='0';}
+};
+
+function selectType(t){
+  assessmentType=t;
+  document.getElementById('typePreBtn').classList.toggle('selected',t==='pre');
+  document.getElementById('typePostBtn').classList.toggle('selected',t==='post');
+}
+
+// ─── SURVEY ──────────────────────────────────────────────────────────────────
+function startSurvey(){
+  const code=document.getElementById('sessionCode').value.trim().toUpperCase();
+  if(!code){document.getElementById('codeError').style.display='block';return;}
+  if(!assessmentType){alert('Please select Pre or Post.');return;}
+  sessionCode=code;
+  demographics={
+    legal_status: document.getElementById('d_legal').value||'not_provided',
+    age_group:    document.getElementById('d_age').value||'not_provided',
+    medications:  document.getElementById('d_meds').value||'not_provided',
+    race:         document.getElementById('d_race').value||'not_provided',
+    region:       document.getElementById('d_region').value||'not_provided',
+    condition:    document.getElementById('d_condition').value||'not_provided'
+  };
+  questions=assessmentType==='post'?[...PRE_QUESTIONS,...POST_EXTRA]:[...PRE_QUESTIONS];
+  answers=new Array(questions.length).fill(null);
+  currentQ=0; show('s-question'); renderQ(0);
+}
+
+function startFollowup(){
+  const code=document.getElementById('followupCode').value.trim().toUpperCase();
+  if(!code){document.getElementById('followupError').style.display='block';return;}
+  sessionCode=code; assessmentType='followup'; isFollowup=true;
+  questions=[...FOLLOWUP_QUESTIONS];
+  answers=new Array(questions.length).fill(null);
+  currentQ=0; show('s-question'); renderQ(0);
+}
+
+function renderQ(idx){
+  const q=questions[idx];
+  const subEl=document.getElementById('qSubscale');
+  subEl.textContent=q.subscale.toUpperCase();
+  subEl.className='q-subscale '+q.subscale;
+  document.getElementById('qCount').textContent=`${idx+1} of ${questions.length}`;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('btnBack').style.visibility=idx===0?'hidden':'visible';
+  document.getElementById('btnNext').disabled=answers[idx]===null;
+  document.getElementById('prog').style.width=`${(idx/questions.length)*100}%`;
+  const optsEl=document.getElementById('qOpts');
+  optsEl.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn'+(answers[idx]===i?' sel':'');
+    btn.textContent=opt.text;
+    btn.onclick=()=>{
+      answers[idx]=i;
+      document.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('sel'));
+      btn.classList.add('sel');
+      document.getElementById('btnNext').disabled=false;
+    };
+    optsEl.appendChild(btn);
+  });
+  currentQ=idx;
+}
+
+function nextQ(){currentQ<questions.length-1?renderQ(currentQ+1):submitSurvey();}
+function prevQ(){if(currentQ>0)renderQ(currentQ-1);}
+
+async function submitSurvey(){
+  document.getElementById('prog').style.width='100%';
+  const scores={};
+  questions.forEach((q,i)=>{scores[q.key]=q.opts[answers[i]].score;});
+  const payload={
+    sessionCode, type:assessmentType,
+    scores, timestamp:new Date().toISOString(),
+    demographics: assessmentType==='pre'?demographics:undefined
+  };
+  try{
+    await fetch('https://nsag-api.vercel.app/api/dru',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+  }catch(e){}
+  show(isFollowup?'s-followup-thankyou':'s-thankyou');
+}
+
+// ─── SCORING ──────────────────────────────────────────────────────────────────
+function computeSubscale(responseScores, keys){
+  const vals=keys.map(k=>responseScores[k]).filter(v=>v!==undefined&&v!==null);
+  if(!vals.length) return null;
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length/3*100);
+}
+
+function computeAllSubscales(responseScores){
+  return {
+    knowledge: computeSubscale(responseScores, SUBSCALE_KEYS.knowledge),
+    attitude:  computeSubscale(responseScores, SUBSCALE_KEYS.attitude),
+    behavior:  computeSubscale(responseScores, SUBSCALE_KEYS.behavior),
+  };
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+async function loadDashboard(){
+  const key=document.getElementById('dashKey').value.trim();
+  if(!key){document.getElementById('dashError').style.display='block';return;}
+  dashKey=key;
+  document.getElementById('dashMain').innerHTML='<div class="loading">Loading...</div>';
+  try{
+    const res=await fetch(`https://nsag-api.vercel.app/api/dru?key=${encodeURIComponent(key)}`);
+    if(res.status===403){document.getElementById('dashError').style.display='block';return;}
+    if(res.status===503){
+      document.getElementById('dashMain').innerHTML='<div class="loading">Dashboard not yet configured.</div>';
+      show('s-dashboard');return;
+    }
+    const data=await res.json();
+    allData=data; window._isResearcher=data.isResearcher||false; show('s-dashboard');
+    document.getElementById('prog').style.width='0';
+    populateSessionSelect(data.sessions||[]);
+    renderDashboard();
+    startAutoRefresh();
+  }catch(e){
+    document.getElementById('dashMain').innerHTML='<div class="loading">Unable to load. Check API is deployed.</div>';
+  }
+}
+
+function startAutoRefresh(){
+  if(refreshInterval) clearInterval(refreshInterval);
+  refreshSecs=0;
+  refreshInterval=setInterval(async()=>{
+    refreshSecs++;
+    const el=document.getElementById('refreshNote');
+    if(el) el.textContent=refreshSecs<60?`Refreshes in ${60-refreshSecs}s`:'Refreshing...';
+    if(refreshSecs>=60){
+      refreshSecs=0;
+      try{
+        const res=await fetch(`https://nsag-api.vercel.app/api/dru?key=${encodeURIComponent(dashKey)}`);
+        if(res.ok){const d=await res.json();allData=d;populateSessionSelect(d.sessions||[]);renderDashboard();}
+      }catch(e){}
+    }
+  },1000);
+}
+
+function populateSessionSelect(sessions){
+  const sel=document.getElementById('sessionSelect');
+  const cur=sel.value;
+  sel.innerHTML='<option value="all">All Sessions Combined</option>';
+  sessions.forEach(s=>{sel.innerHTML+=`<option value="${s}">${s}</option>`;});
+  if(cur&&cur!=='all') sel.value=cur;
+}
+
+function renderDashboard(){
+  const sel=document.getElementById('sessionSelect').value;
+  let pre=(allData.pre||[]).map(r=>({...r,type:'pre'}));
+  let post=(allData.post||[]).map(r=>({...r,type:'post'}));
+  let followup=(allData.followup||[]).map(r=>({...r,type:'followup'}));
+  if(sel!=='all'){
+    pre=pre.filter(r=>r.sessionCode===sel);
+    post=post.filter(r=>r.sessionCode===sel);
+    followup=followup.filter(r=>r.sessionCode===sel);
+  }
+
+  // Stats
+  const completion=pre.length>0?Math.round(post.length/pre.length*100):0;
+  document.getElementById('sTotal').textContent=pre.length+post.length;
+  document.getElementById('sPre').textContent=pre.length;
+  document.getElementById('sPost').textContent=post.length;
+  document.getElementById('sFollowup').textContent=followup.length;
+  document.getElementById('sCompletion').textContent=pre.length>0?completion+'%':'—';
+
+  if(pre.length===0&&post.length===0){
+    document.getElementById('dashMain').innerHTML='<div class="loading">No responses yet for this filter.</div>';
+    return;
+  }
+
+  // Subscale averages
+  function avgSubscale(responses, subKey){
+    const vals=responses.map(r=>computeSubscale(r.scores||{}, SUBSCALE_KEYS[subKey])).filter(v=>v!==null);
+    return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):null;
+  }
+  const preK=avgSubscale(pre,'knowledge'), postK=avgSubscale(post,'knowledge');
+  const preA=avgSubscale(pre,'attitude'),  postA=avgSubscale(post,'attitude');
+  const preB=avgSubscale(pre,'behavior'),  postB=avgSubscale(post,'behavior');
+  const preOverall=preK!==null&&preA!==null&&preB!==null?Math.round((preK+preA+preB)/3):null;
+  const postOverall=postK!==null&&postA!==null&&postB!==null?Math.round((postK+postA+postB)/3):null;
+  const overallDelta=preOverall!==null&&postOverall!==null?postOverall-preOverall:null;
+
+  let html='';
+
+  // Callout bar
+  if(preOverall!==null||postOverall!==null){
+    html+=`<div class="callout">`;
+    if(preOverall!==null) html+=`<div><div class="callout-label">Overall Pre</div><div class="callout-val">${preOverall}%</div></div><div class="callout-divider"></div>`;
+    if(postOverall!==null) html+=`<div><div class="callout-label">Overall Post</div><div class="callout-val">${postOverall}%</div></div>`;
+    if(overallDelta!==null) html+=`<div class="callout-divider"></div><div><div class="callout-label">Overall Gain</div><div class="callout-val">${overallDelta>0?'+':''}${overallDelta}%</div></div>`;
+    if(followup.length>0){
+      const fuComfort=followup.map(r=>r.scores?.fu_comfort_change??null).filter(v=>v!==null);
+      const fuAvg=fuComfort.length?Math.round(fuComfort.reduce((a,b)=>a+b,0)/fuComfort.length/3*100):null;
+      if(fuAvg!==null) html+=`<div class="callout-divider"></div><div><div class="callout-label">Follow-Up Comfort</div><div class="callout-val">${fuAvg}%</div></div>`;
+    }
+    html+=`</div>`;
+  }
+
+  // Subscale cards
+  function deltaClass(d){ return d>0?'pos':d<0?'neg':'zero'; }
+  function deltaStr(pre,post){ if(pre===null||post===null)return''; const d=post-pre; return `<span class="subscale-delta ${deltaClass(d)}">${d>0?'+':''}${d}%</span>`; }
+  html+=`<div class="subscale-row">
+    <div class="subscale-card">
+      <div class="subscale-label knowledge">Knowledge</div>
+      <div class="subscale-score-row">
+        ${preK!==null?`<span class="subscale-pre">${preK}%</span>`:''}
+        ${preK!==null&&postK!==null?`<span class="subscale-arr">→</span>`:''}
+        ${postK!==null?`<span class="subscale-post">${postK}%</span>`:''}
+        ${deltaStr(preK,postK)}
+      </div>
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:6px;">Drug interactions, documentation, product literacy, polypharmacy</div>
+    </div>
+    <div class="subscale-card">
+      <div class="subscale-label attitude">Attitude</div>
+      <div class="subscale-score-row">
+        ${preA!==null?`<span class="subscale-pre">${preA}%</span>`:''}
+        ${preA!==null&&postA!==null?`<span class="subscale-arr">→</span>`:''}
+        ${postA!==null?`<span class="subscale-post">${postA}%</span>`:''}
+        ${deltaStr(preA,postA)}
+      </div>
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:6px;">Disclosure comfort, stigma, cultural factors, care setting</div>
+    </div>
+    <div class="subscale-card">
+      <div class="subscale-label behavior">Behavior</div>
+      <div class="subscale-score-row">
+        ${preB!==null?`<span class="subscale-pre">${preB}%</span>`:''}
+        ${preB!==null&&postB!==null?`<span class="subscale-arr">→</span>`:''}
+        ${postB!==null?`<span class="subscale-post">${postB}%</span>`:''}
+        ${deltaStr(preB,postB)}
+      </div>
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:6px;">Past disclosure, caregiver disclosure, documentation barriers</div>
+    </div>
+  </div>`;
+
+  // Per-question delta bars
+  html+=`<p class="section-label">Per-Question Pre vs Post</p><div class="delta-table">`;
+  PRE_QUESTIONS.forEach(q=>{
+    const preScores=pre.map(r=>r.scores?.[q.key]??null).filter(v=>v!==null);
+    const postScores=post.map(r=>r.scores?.[q.key]??null).filter(v=>v!==null);
+    const preAvg=preScores.length?preScores.reduce((a,b)=>a+b,0)/preScores.length/3*100:null;
+    const postAvg=postScores.length?postScores.reduce((a,b)=>a+b,0)/postScores.length/3*100:null;
+    const delta=(preAvg!==null&&postAvg!==null)?Math.round(postAvg-preAvg):null;
+    const dColor=delta>0?'var(--improve)':delta<0?'var(--concern)':'var(--neutral)';
+    html+=`<div class="delta-row">
+      <div class="delta-q">
+        <span class="delta-subscale-tag ${q.subscale}">${q.subscale}</span>${q.text.substring(0,90)}${q.text.length>90?'...':''}
+      </div>
+      <div class="delta-bars">
+        ${preAvg!==null?`<div class="delta-bar-group"><div class="delta-bar-label"><span>Pre</span><span>${Math.round(preAvg)}%</span></div><div class="delta-bar-rail"><div class="delta-bar-fill" style="width:${Math.round(preAvg)}%;background:var(--ink-soft)"></div></div></div>`:'<div class="delta-bar-group" style="font-size:11px;color:var(--ink-soft)">No pre data</div>'}
+        ${postAvg!==null?`<div class="delta-bar-group"><div class="delta-bar-label"><span>Post</span><span>${Math.round(postAvg)}%</span></div><div class="delta-bar-rail"><div class="delta-bar-fill" style="width:${Math.round(postAvg)}%;background:var(--green)"></div></div></div>`:'<div class="delta-bar-group" style="font-size:11px;color:var(--ink-soft)">No post data</div>'}
+        ${delta!==null?`<div class="delta-change" style="color:${dColor}">${delta>0?'+':''}${delta}%</div>`:''}
+      </div></div>`;
+  });
+  html+=`</div>`;
+
+  // Post-session outcome questions
+  if(post.length>0){
+    html+=`<p class="section-label" style="margin-top:22px;">Post-Session Outcomes</p><div class="delta-table">`;
+    POST_EXTRA.forEach(q=>{
+      const scores=post.map(r=>r.scores?.[q.key]??null).filter(v=>v!==null);
+      if(!scores.length)return;
+      const avg=Math.round(scores.reduce((a,b)=>a+b,0)/scores.length/3*100);
+      html+=`<div class="delta-row">
+        <div class="delta-q"><span class="delta-subscale-tag outcome">outcome</span>${q.text.substring(0,90)}${q.text.length>90?'...':''}</div>
+        <div class="delta-bars">
+          <div class="delta-bar-group" style="flex:2"><div class="delta-bar-label"><span>${q.dim}</span><span>${avg}%</span></div><div class="delta-bar-rail"><div class="delta-bar-fill" style="width:${avg}%;background:var(--green)"></div></div></div>
+          <div class="delta-change" style="color:var(--green)">${avg}%</div>
+        </div></div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // Follow-up outcomes
+  if(followup.length>0){
+    html+=`<p class="section-label" style="margin-top:22px;">Follow-Up Outcomes (${followup.length} respondents)</p><div class="delta-table">`;
+    FOLLOWUP_QUESTIONS.forEach(q=>{
+      const scores=followup.map(r=>r.scores?.[q.key]??null).filter(v=>v!==null);
+      if(!scores.length)return;
+      const avg=Math.round(scores.reduce((a,b)=>a+b,0)/scores.length/3*100);
+      html+=`<div class="delta-row">
+        <div class="delta-q"><span class="delta-subscale-tag" style="background:var(--amber-light);color:var(--amber);">followup</span>${q.text.substring(0,90)}</div>
+        <div class="delta-bars">
+          <div class="delta-bar-group" style="flex:2"><div class="delta-bar-label"><span>${q.dim}</span><span>${avg}%</span></div><div class="delta-bar-rail"><div class="delta-bar-fill" style="width:${avg}%;background:var(--amber)"></div></div></div>
+          <div class="delta-change" style="color:var(--amber)">${avg}%</div>
+        </div></div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // Individual response table
+  const allResponses=[
+    ...pre,...post,...followup
+  ].sort((a,b)=>new Date(b.timestamp||0)-new Date(a.timestamp||0));
+
+  if(allResponses.length>0){
+    html+=`<p class="section-label" style="margin-top:28px;">Individual Responses (${allResponses.length})</p>
+    <table class="resp-table"><thead><tr>
+      <th>Session</th><th>Type</th><th>Time</th>
+      <th>K%</th><th>A%</th><th>B%</th>
+      ${PRE_QUESTIONS.slice(0,7).map(q=>`<th title="${q.text}">${q.key.substring(0,6)}</th>`).join('')}
+      <th></th>
+    </tr></thead><tbody>`;
+    allResponses.forEach((r,idx)=>{
+      const ts=r.timestamp?new Date(r.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+      const sub=r.type!=='followup'?computeAllSubscales(r.scores||{}):{knowledge:null,attitude:null,behavior:null};
+      html+=`<tr class="resp-row" onclick="toggleRow(${idx})">
+        <td><strong>${r.sessionCode||'—'}</strong></td>
+        <td><span class="type-badge ${r.type}">${r.type}</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:9px;">${ts}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;">${sub.knowledge!==null?sub.knowledge+'%':'—'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;">${sub.attitude!==null?sub.attitude+'%':'—'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;">${sub.behavior!==null?sub.behavior+'%':'—'}</td>
+        ${PRE_QUESTIONS.slice(0,7).map(q=>{
+          const s=r.scores?.[q.key];
+          return s===undefined?'<td style="color:var(--ink-soft)">—</td>':`<td><span class="score-dot" style="background:${SCORE_COLOR(s)}"></span>${s}</td>`;
+        }).join('')}
+        <td><button class="btn-dl-row" onclick="event.stopPropagation();downloadRow(${idx})">↓</button></td>
+      </tr>
+      <tr class="detail-row" id="detail-${idx}">
+        <td colspan="${PRE_QUESTIONS.slice(0,7).length+7}" class="detail-cell">
+          <div class="detail-grid">
+            ${Object.keys(r.scores||{}).map(key=>{
+              const qDef=[...PRE_QUESTIONS,...POST_EXTRA,...FOLLOWUP_QUESTIONS].find(q=>q.key===key);
+              const s=r.scores[key];
+              const label=SCORE_LABELS[key]?.[s]||`Score: ${s}`;
+              return `<div class="detail-item">
+                <div class="detail-q">${qDef?qDef.subscale+' · '+key.replace(/_/g,' '):key}</div>
+                ${qDef?`<div style="font-size:10px;color:var(--ink-soft);margin-bottom:3px;line-height:1.3;">${qDef.text.substring(0,70)}...</div>`:''}
+                <div class="detail-a"><span class="score-dot" style="background:${SCORE_COLOR(s)}"></span>${label}</div>
+              </div>`;
+            }).join('')}
+            ${r.demographics?`<div class="detail-item" style="grid-column:1/-1">
+              <div class="detail-q">Demographics</div>
+              <div style="font-size:11px;color:var(--ink-mid);">${Object.entries(r.demographics).filter(([k,v])=>v&&v!=='not_provided').map(([k,v])=>`${k.replace(/_/g,' ')}: ${v}`).join(' · ')}</div>
+            </div>`:''}
+          </div>
+        </td>
+      </tr>`;
+    });
+    html+=`</tbody></table>`;
+    window._respData=allResponses;
+  }
+
+  document.getElementById('dashMain').innerHTML=html;
+}
+
+function toggleRow(idx){
+  const row=document.getElementById(`detail-${idx}`);
+  const trigger=row.previousElementSibling;
+  row.classList.toggle('open');
+  trigger.classList.toggle('expanded');
+}
+
+function downloadRow(idx){
+  const r=window._respData[idx];if(!r)return;
+  const allKeys=Object.keys(r.scores||{});
+  const header=['session','type','timestamp',...allKeys].join(',');
+  const vals=[r.sessionCode,r.type,r.timestamp,...allKeys.map(k=>r.scores?.[k]??'')].join(',');
+  const blob=new Blob([[header,vals].join('\n')],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`dru-${r.sessionCode}-${r.type}-${r.timestamp?.split('T')[0]||'resp'}.csv`;a.click();
+}
+
+function exportCSV(typeFilter){
+  const sel=document.getElementById('sessionSelect').value;
+  let responses=[
+    ...(allData.pre||[]).map(r=>({...r,type:'pre'})),
+    ...(allData.post||[]).map(r=>({...r,type:'post'})),
+    ...(allData.followup||[]).map(r=>({...r,type:'followup'}))
+  ];
+  if(sel!=='all') responses=responses.filter(r=>r.sessionCode===sel);
+  if(typeFilter!=='all') responses=responses.filter(r=>r.type===typeFilter);
+  if(!responses.length){alert('No data to export for this filter.');return;}
+  const allKeys=new Set();
+  responses.forEach(r=>Object.keys(r.scores||{}).forEach(k=>allKeys.add(k)));
+  const demoKeys=['legal_status','age_group','medications','race'];
+  const keys=Array.from(allKeys);
+  const header=['session','type','timestamp',...keys,...demoKeys].join(',');
+  const rows=[header,...responses.map(r=>[
+    r.sessionCode,r.type,r.timestamp,
+    ...keys.map(k=>r.scores?.[k]??''),
+    ...demoKeys.map(k=>r.demographics?.[k]||'')
+  ].join(','))];
+  const blob=new Blob([rows.join('\n')],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`dru-${typeFilter}-${sel}-${new Date().toISOString().split('T')[0]}.csv`;a.click();
+}
+
+// ─── RESEARCHER VIEW ──────────────────────────────────────────────────────────
+function activateResearcherView(pre, post, followup, sessions) {
+  document.getElementById('researcherBadge').style.display = 'inline';
+  document.getElementById('researcherSections').classList.add('visible');
+  const mpBtn = document.getElementById('matchedPairsBtn');
+  if (mpBtn) mpBtn.style.display = 'inline-block';
+  renderDemographics(pre);
+  renderQuality(pre, post, followup, sessions);
+  renderSessionNotes();
+  renderBenchmarks(pre, post, followup);
+  renderIntentionAction(post, followup);
+  renderPubReadiness(pre, post, followup, sessions);
+}
+
+function renderDemographics(pre) {
+  const container = document.getElementById('demoBreakdown');
+  if (!container) return;
+  if (!pre.length) { container.innerHTML = '<p style="font-size:13px;color:var(--ink-soft);grid-column:1/-1;">No pre-assessment responses with demographics yet.</p>'; return; }
+  
+  const demos = pre.map(r => r.demographics).filter(Boolean);
+  if (!demos.length) { container.innerHTML = '<p style="font-size:13px;color:var(--ink-soft);grid-column:1/-1;">No demographic data collected yet.</p>'; return; }
+
+  function dist(key) {
+    const counts = {};
+    demos.forEach(d => { const v = d[key]||'not_provided'; counts[v]=(counts[v]||0)+1; });
+    return Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  }
+
+  const LABELS = {
+    legal_status: { fully_legal:'Fully legal', medical_only:'Medical only', decriminalized:'Decriminalized', not_legal:'Not legal', unsure:'Unsure', not_provided:'Not provided' },
+    age_group:    { '18_34':'18–34', '35_54':'35–54', '55_64':'55–64', '65_plus':'65+', prefer_not:'Prefer not', not_provided:'Not provided' },
+    medications:  { none:'None', '1_4':'1–4', '5_9':'5–9 (poly)', '10_plus':'10+', not_provided:'Not provided' },
+    race:         { white:'White', black:'Black/AA', hispanic:'Hispanic/Latino', asian:'Asian/AA', native:'Native American', pacific:'Pacific Islander', multiracial:'Multiracial', other:'Other', prefer_not:'Prefer not', not_provided:'Not provided' },
+    region:       { northeast:'Northeast', southeast:'Southeast', midwest:'Midwest', south:'South', southwest:'Southwest', west_coast:'West Coast', hawaii_alaska:'Hawaii/Alaska', outside_us:'Outside US', prefer_not:'Prefer not', not_provided:'Not provided' },
+    condition:    { pain:'Pain', oncology:'Oncology', mental_health:'Mental Health', epilepsy:'Epilepsy', sleep:'Sleep', general_wellness:'Wellness', recreational:'Recreational', caregiver:'Caregiver', prefer_not:'Prefer not', not_provided:'Not provided' }
+  };
+  const titles = { legal_status:'State Legal Status', age_group:'Age Group', medications:'Medications', race:'Race / Ethnicity', region:'U.S. Region', condition:'Primary Use' };
+  const max = demos.length;
+
+  container.innerHTML = Object.entries(titles).map(([key, title]) => {
+    const d = dist(key);
+    return `<div class="demo-card">
+      <div class="demo-card-label">${title}</div>
+      ${d.slice(0,5).map(([val, count]) => {
+        const label = LABELS[key]?.[val] || val;
+        const pct = Math.round(count/max*100);
+        return `<div class="demo-bar-row">
+          <span style="width:90px;flex-shrink:0;">${label}</span>
+          <div style="flex:1;height:4px;background:var(--green-light);border-radius:2px;overflow:hidden;">
+            <div class="demo-bar-fill" style="width:${pct}%"></div>
+          </div>
+          <span style="width:26px;text-align:right;">${count}</span>
+        </div>`;
+      }).join('')}
+      <p style="margin:6px 0 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink-soft);">${max} with demo data</p>
+    </div>`;
+  }).join('');
+}
+
+function renderQuality(pre, post, followup, sessions) {
+  const container = document.getElementById('qualityPanel');
+  if (!container) return;
+  const sel = document.getElementById('sessionSelect').value;
+  const filtSessions = sel === 'all' ? sessions : [sel];
+  
+  const noPost    = filtSessions.filter(s => pre.filter(r=>r.sessionCode===s).length > 0 && post.filter(r=>r.sessionCode===s).length === 0);
+  const lowN      = filtSessions.filter(s => (pre.filter(r=>r.sessionCode===s).length + post.filter(r=>r.sessionCode===s).length) < 10);
+  const fuRate    = pre.length > 0 ? Math.round(followup.length / pre.length * 100) : 0;
+  const postRate  = pre.length > 0 ? Math.round(post.length / pre.length * 100) : 0;
+
+  container.innerHTML = [
+    { val: sessions.length, label: 'Total Sessions' },
+    { val: postRate + '%', label: 'Post Completion' },
+    { val: fuRate + '%', label: 'Follow-Up Rate' },
+    { val: noPost.length, label: 'Sessions w/ No Post', warn: noPost.length > 0 },
+    { val: lowN.length, label: 'Sessions <10 Responses', warn: lowN.length > 0 },
+  ].map(({ val, label, warn }) => `
+    <div class="quality-card">
+      <div class="quality-val" style="color:${warn ? 'var(--concern)' : 'var(--green-dark)'}">${val}</div>
+      <div class="quality-label">${label}</div>
+    </div>`).join('');
+}
+
+function renderSessionNotes() {
+  const container = document.getElementById('sessionNotesContainer');
+  if (!container) return;
+  const sel = document.getElementById('sessionSelect').value;
+  if (sel === 'all') {
+    container.innerHTML = '<p style="font-size:13px;color:var(--ink-soft);">Select a specific session to add private notes.</p>';
+    return;
+  }
+  const storageKey = `dru_note_${sel}`;
+  const existing   = localStorage.getItem(storageKey) || '';
+  container.innerHTML = `
+    <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px;">Notes for ${sel}</p>
+    <textarea class="notes-area" id="noteArea_${sel}" placeholder="Private session notes — themes, surprises, follow-ups, media contacts...">${existing}</textarea>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+      <button onclick="saveNote('${sel}')" class="btn-export" style="margin:0;">Save Note</button>
+      <span class="notes-saved" id="noteSaved_${sel}">✓ Saved</span>
+    </div>`;
+}
+
+function saveNote(session) {
+  const area = document.getElementById(`noteArea_${session}`);
+  if (!area) return;
+  localStorage.setItem(`dru_note_${session}`, area.value);
+  const saved = document.getElementById(`noteSaved_${session}`);
+  if (saved) { saved.style.display = 'inline'; setTimeout(() => saved.style.display = 'none', 2000); }
+}
+
+
+// ─── BENCHMARKS ───────────────────────────────────────────────────────────────
+function renderBenchmarks(pre, post, followup) {
+  const container = document.getElementById('benchmarkPanel');
+  if (!container) return;
+
+  // Tour values
+  const prePast = pre.map(r=>r.scores?.past_disclosure??null).filter(v=>v!==null);
+  const pctDisclosed = prePast.length ? Math.round(prePast.filter(s=>s>=2).length/prePast.length*100) : null;
+  const preKnow = pre.map(r=>computeSubscale(r.scores||{}, SUBSCALE_KEYS.knowledge)).filter(v=>v!==null);
+  const preKavg = preKnow.length ? Math.round(preKnow.reduce((a,b)=>a+b,0)/preKnow.length) : null;
+  const postKnow = post.map(r=>computeSubscale(r.scores||{}, SUBSCALE_KEYS.knowledge)).filter(v=>v!==null);
+  const postKavg = postKnow.length ? Math.round(postKnow.reduce((a,b)=>a+b,0)/postKnow.length) : null;
+
+  container.innerHTML = `<div class="bench-grid">
+    <div class="bench-card">
+      <div class="bench-source">Lapham / Kaiser 2022</div>
+      <div class="bench-stat">4.8%</div>
+      <div class="bench-label">EHR documentation of cannabis use vs 26% who reported use confidentially — a 5× gap</div>
+      <div class="bench-tour">Your tour: ${pctDisclosed !== null ? pctDisclosed+'% disclosed to a provider' : 'Collecting...'}</div>
+    </div>
+    <div class="bench-card">
+      <div class="bench-source">King et al. 2024</div>
+      <div class="bench-stat">15.1%</div>
+      <div class="bench-label">Provider-initiated cannabis discussions — patients initiated 57.1% of the time</div>
+      <div class="bench-tour">Context: your tool measures comfort and past disclosure, not initiation direction</div>
+    </div>
+    <div class="bench-card">
+      <div class="bench-source">Kruger et al. 2022</div>
+      <div class="bench-stat">58%</div>
+      <div class="bench-label">Average provider knowledge score on cannabis (physicians, range 39–78%)</div>
+      <div class="bench-tour">Your tour (pre Knowledge avg): ${preKavg !== null ? preKavg+'%' : 'Collecting...'} → post: ${postKavg !== null ? postKavg+'%' : 'Collecting...'}</div>
+    </div>
+  </div>`;
+}
+
+// ─── INTENTION-ACTION GAP ──────────────────────────────────────────────────────
+function renderIntentionAction(post, followup) {
+  const container = document.getElementById('intentionActionPanel');
+  if (!container) return;
+  if (!post.length || !followup.length) {
+    container.innerHTML = '<p style="font-size:13px;color:var(--ink-soft);">Requires both post-session and follow-up responses.</p>';
+    return;
+  }
+  const intendedPct = Math.round(post.filter(r=>(r.scores?.ttm_stage??0)>=2).length/post.length*100);
+  const disclosedPct = Math.round(followup.filter(r=>(r.scores?.fu_disclosed??0)>=2).length/followup.length*100);
+  const gap = intendedPct - disclosedPct;
+  container.innerHTML = `
+    <div class="ia-row">
+      <div class="ia-block">
+        <div class="ia-val" style="color:var(--green)">${intendedPct}%</div>
+        <div class="ia-lbl">Intended to disclose post-session<br>(TTM stage ≥ planning)</div>
+      </div>
+      <div class="ia-arrow">→</div>
+      <div class="ia-block">
+        <div class="ia-val" style="color:${disclosedPct>=intendedPct*0.7?'var(--green)':'var(--amber)'}">${disclosedPct}%</div>
+        <div class="ia-lbl">Actually disclosed by follow-up<br>(fu_disclosed ≥ yes)</div>
+      </div>
+      <div class="ia-arrow">→</div>
+      <div class="ia-block">
+        <div class="ia-val" style="color:${gap>20?'var(--concern)':gap>10?'var(--amber)':'var(--green)'}">${gap}%</div>
+        <div class="ia-lbl">Intention-action gap<br>(publishable finding)</div>
+      </div>
+    </div>
+    <p style="margin-top:12px;font-size:11px;color:var(--ink-soft);font-family:'DM Mono',monospace;">n=${post.length} post · n=${followup.length} follow-up · gap = % who intended minus % who acted</p>`;
+}
+
+// ─── PUBLICATION READINESS ─────────────────────────────────────────────────────
+function renderPubReadiness(pre, post, followup, sessions) {
+  const container = document.getElementById('pubReadinessPanel');
+  if (!container) return;
+
+  const fuRate = pre.length > 0 ? Math.round(followup.length/pre.length*100) : 0;
+  const sessionsWithBoth = sessions.filter(s =>
+    pre.some(r=>r.sessionCode===s) && post.some(r=>r.sessionCode===s)
+  ).length;
+
+  const demos = pre.map(r=>r.demographics).filter(Boolean);
+  const regions = new Set(demos.map(d=>d.region).filter(v=>v&&v!=='not_provided')).size;
+  const legalStates = new Set(demos.map(d=>d.legal_status).filter(v=>v&&v!=='not_provided')).size;
+  const stateVariety = regions + legalStates;
+
+  const thresholds = [
+    { label:'Pre-assessment responses', val:pre.length, threshold:100, unit:'participants' },
+    { label:'Post-assessment responses', val:post.length, threshold:80, unit:'participants' },
+    { label:'Geographic variety', val:stateVariety, threshold:3, unit:'regions / legal status categories' },
+    { label:'Sessions with matched pre+post', val:sessionsWithBoth, threshold:3, unit:'sessions' },
+    { label:'Follow-up completion rate', val:fuRate, threshold:30, unit:'%' },
+    { label:'Follow-up responses', val:followup.length, threshold:30, unit:'responses' },
+  ];
+
+  container.innerHTML = thresholds.map(t => {
+    const met = t.val >= t.threshold;
+    const pct = Math.min(100, Math.round(t.val/t.threshold*100));
+    return `<div class="pub-row">
+      <div class="pub-check">${met?'✅':'⬜'}</div>
+      <div class="pub-label">${t.label}</div>
+      <div class="pub-val">${t.val} / ${t.threshold} ${t.unit}
+        <div style="height:3px;background:var(--green-light);border-radius:2px;margin-top:3px;width:80px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${met?'var(--green)':'var(--amber)'};border-radius:2px;"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── MATCHED PAIRS EXPORT ─────────────────────────────────────────────────────
+function exportMatchedPairs() {
+  const sel = document.getElementById('sessionSelect').value;
+  let pre  = (allData.pre||[]).map(r=>({...r,type:'pre'}));
+  let post = (allData.post||[]).map(r=>({...r,type:'post'}));
+  if (sel !== 'all') { pre=pre.filter(r=>r.sessionCode===sel); post=post.filter(r=>r.sessionCode===sel); }
+
+  const sessions = [...new Set([...pre,...post].map(r=>r.sessionCode))];
+  const pairs = [];
+  sessions.forEach(code => {
+    const preSess  = pre.filter(r=>r.sessionCode===code).sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+    const postSess = post.filter(r=>r.sessionCode===code).sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+    const maxLen = Math.max(preSess.length, postSess.length);
+    for (let i=0; i<maxLen; i++) {
+      const p = preSess[i], q = postSess[i];
+      pairs.push({ session:code, pair:i+1, pre_ts:p?.timestamp||'', post_ts:q?.timestamp||'',
+        ...Object.fromEntries(SUBSCALE_KEYS.knowledge.concat(SUBSCALE_KEYS.attitude).concat(SUBSCALE_KEYS.behavior).map(k=>[
+          ['pre_'+k, p?.scores?.[k]??''],
+          ['post_'+k, q?.scores?.[k]??'']
+        ]).flat())
+      });
+    }
+  });
+
+  if (!pairs.length) { alert('No data to export.'); return; }
+  const keys = Object.keys(pairs[0]);
+  const rows = [keys.join(','), ...pairs.map(p=>keys.map(k=>JSON.stringify(p[k]??'')).join(','))];
+  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url;
+  a.download = `dru-matched-pairs-${sel}-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+
+</script>
+</body>
+</html>
