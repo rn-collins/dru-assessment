@@ -1,1 +1,1 @@
-{"name":"Questionnaire Workflow Sandbox","short_name":"Questionnaire","start_url":"/","display":"standalone","background_color":"#f4f1e8","theme_color":"#236447","icons":[{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml"}]}
+{"name":"Questionnaire Workflow Sandbox","short_name":"Questionnaire","start_url":"/","display":"standalone","background_color":"#f4f1e8","theme_color":"#236447","icons":[{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml"},{"src":"/apple-touch-icon.png","sizes":"180x180","type":"image/png"}]}
