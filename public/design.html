@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Design rationale · Questionnaire Sandbox</title>
+<meta name="description" content="Why the sandbox uses participant-generated linkage codes, what a pre/post pair can and cannot show, and a worked example of reading one pair honestly.">
+<link rel="canonical" href="https://dru-assessment.vercel.app/design">
+<meta property="og:title" content="Design rationale">
+<meta property="og:description" content="Why the sandbox uses participant-generated linkage codes, what a pre/post pair can and cannot show, and a worked example of reading one pair honestly.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dru-assessment.vercel.app/design">
+<meta property="og:image" content="https://dru-assessment.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Design rationale for the questionnaire sandbox.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header>
+<p class="eyebrow">Design rationale</p>
+<h1>Why a demonstration needs something to demonstrate.</h1>
+<p class="lede">This tool is unvalidated on purpose and says so everywhere. But “unvalidated” is a statement about evidence, not an excuse for vagueness. The thing being demonstrated is a specific, reusable design: pseudonymous pre/post linkage, and the discipline of reading it without overclaiming.</p>
+<div class="rail">
+  <div><span>Linkage unit</span><b>code + phase</b></div>
+  <div><span>Uniqueness rule</span><b>one record per code+phase</b></div>
+  <div><span>Code space</span><b>32<sup>8</sup> ≈ 1.1 × 10<sup>12</sup></b></div>
+  <div><span>Reviewed</span><b>29 August 2026</b></div>
+</div>
+<nav aria-label="Documentation"><a href="/">Return to questionnaire</a> <a href="/methodology">Methodology &amp; sources</a> <a href="/privacy">Privacy</a></nav>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section>
+<h2>The three ways to collect a questionnaire twice</h2>
+<p>Every pre/post instrument has to solve one problem: how do you know the second response came from the person who gave the first? There are only three broad answers, and each one trades measurement against exposure.</p>
+<dl class="defs">
+  <dt>Collect anonymously and do not link</dt>
+  <dd>Safest for the respondent, and the resulting data cannot support a within-person statement of any kind. Differences between the “before” group and the “after” group are confounded with the fact that they are not the same people, and with who chose to answer each time.</dd>
+  <dt>Collect an identity</dt>
+  <dd>Linkage becomes trivial and permanent. The record is now directly attributable, and every export, backup, and downstream analysis carries a person's identity along with a sensitive disclosure about cannabis use — a disclosure that can matter for employment, insurance, custody, immigration, and licensing.</dd>
+  <dt>Collect a participant-generated code</dt>
+  <dd>The respondent invents a key, uses it twice, and keeps the mapping in their own head. The instrument gets linkage; the instrument never gets identity. This is what the sandbox implements.</dd>
+</dl>
+<p>Under the EU General Data Protection Regulation, replacing an identifier with a code is <em>pseudonymisation</em> — expressly defined as data that can still be attributed to a person with additional information held separately (Regulation (EU) 2016/679, Article 4(5)). Pseudonymised data remains personal data. The sandbox therefore uses the word “pseudonymous” everywhere and never the word “anonymous”.</p>
+</section>
+
+<section>
+<h2>How the linkage is actually implemented here</h2>
+<p>The mechanics are deliberately small enough to audit in a single sitting.</p>
+<dl class="defs">
+  <dt>Code alphabet</dt>
+  <dd>Eight characters drawn from a 32-symbol alphabet with <code>I</code>, <code>O</code>, <code>0</code> and <code>1</code> removed, so a handwritten code does not transcribe into a different one. Generated codes come from <code>crypto.getRandomValues</code>, not <code>Math.random</code>.</dd>
+  <dt>Record key</dt>
+  <dd>A record is uniquely identified by code plus phase. Saving a second PRE under an existing code is refused rather than silently overwriting the first, because a silent overwrite destroys the earlier answer and leaves no trace that it existed.</dd>
+  <dt>Validation on read</dt>
+  <dd>Stored rows are re-validated every time the page loads and every time a file is imported: schema version, code shape, phase value, parseable timestamp, and every answer either <code>null</code> or an integer from 0 to 3. Rows that fail are quarantined and excluded, and the page says so.</dd>
+  <dt>Ordering</dt>
+  <dd>Pairing uses the declared phase, not the timestamp. A respondent who fills in the POST form first has mislabelled their own record, and the tool cannot detect that — which is why the phase radio is a deliberate, explicit choice rather than an inference.</dd>
+</dl>
+</section>
+
+<section>
+<h2>A worked example: reading one pair</h2>
+<p>Suppose code <code>K7QMR4TH</code> has both records, and on the item <em>“I feel prepared to describe the cannabis products, amount, route, frequency, and timing relevant to my care”</em> the answers are:</p>
+<div class="tablewrap">
+<table class="pairs">
+<caption>One item from one pair. This is the entire evidentiary content of the observation.</caption>
+<thead><tr><th scope="col">Item</th><th scope="col">Pre</th><th scope="col">Post</th><th scope="col">Transition</th></tr></thead>
+<tbody>
+<tr><th scope="row">Conversation preparedness</th><td>Somewhat disagree</td><td>Agree</td><td class="arrow">Somewhat disagree → Agree</td></tr>
+</tbody>
+</table>
+</div>
+<h3>What may be said</h3>
+<p>“Under code K7QMR4TH, the recorded label on the preparedness item moved from <em>Somewhat disagree</em> to <em>Agree</em> between a record marked PRE and a record marked POST.” That is a complete and accurate sentence, and it is the strongest one available.</p>
+<h3>What may not be said</h3>
+<p>That preparedness improved. That anything caused it. That the difference is two units, or 66%, or worth anything on a scale — the response options are ordered labels, and the distance from “Somewhat disagree” to “Somewhat agree” is not known to equal the distance from “Somewhat agree” to “Agree”. Treating ordered labels as numbers is a specific, documented way to produce confident errors, including sign reversals in which the analysis reports the opposite of the underlying pattern (Liddell &amp; Kruschke, 2018). Nothing in this tool converts a label to a number, and the export marks the responses as ordinal so a downstream reader inherits the same constraint.</p>
+<h3>The rival explanations, in order of how often they are ignored</h3>
+<ol>
+<li><strong>Response shift.</strong> The respondent's internal standard for “prepared” moved between the two answers. This can run in either direction, and it is worst precisely when the intervening experience was informative (Howard &amp; Dailey, 1979; Sprangers &amp; Schwartz, 1999).</li>
+<li><strong>Testing effect.</strong> The first questionnaire told the respondent that amount, route, frequency, and timing are the things a clinician might want. The second answer is downstream of that, with or without anything else happening.</li>
+<li><strong>Social desirability.</strong> “I intend to ask a healthcare professional” has an obviously approved answer, and the pull toward it is stronger once the respondent has worked out what the instrument is about (Krumpal, 2013).</li>
+<li><strong>Regression to the mean.</strong> An unusually low first answer tends to be followed by a less extreme second answer with no intervening cause whatsoever (Barnett et al., 2004).</li>
+<li><strong>Everything in the gap.</strong> There is no control condition, no randomization, no fixed interval, and no record of exposure. The design does not distinguish a class, a news article, a conversation with a pharmacist, and a bad week.</li>
+</ol>
+</section>
+
+<section class="flagged">
+<h2>What would have to change for this to be research</h2>
+<p>Naming the gap is more useful than gesturing at it. To move from a workflow sketch toward something that could carry an evidentiary claim, a study would need, at minimum:</p>
+<ul>
+<li>A validated instrument — these six items have no published reliability or validity evidence, no factor structure, and no established interpretation.</li>
+<li>A comparison condition, and allocation the investigator controls, so that “after” is contrasted with something other than “before”.</li>
+<li>A pre-specified analysis plan, fixed before data collection, using methods appropriate to ordinal responses.</li>
+<li>A defined interval between phases and a record of what exposure occurred in it.</li>
+<li>Accounting for attrition, including who did not return.</li>
+<li>Ethical review and informed consent. The checkbox on the questionnaire page is an acknowledgement of local storage. It is not consent to research, and it is not consent to clinical care.</li>
+</ul>
+<p>Until all six exist, the honest output of this design is a description of two labelled answers under one code — which is exactly what the tool prints.</p>
+</section>
+
+<section>
+<h2>Why it never touches the network</h2>
+<p>The browser-local guarantee is not a convenience decision. Cannabis disclosure is sensitive in ways that outlive the questionnaire, and the most reliable way to protect a record is not to transmit it. The site's Content-Security-Policy sets <code>connect-src 'none'</code>, which means the page cannot open a <code>fetch</code>, an <code>XMLHttpRequest</code>, a <code>WebSocket</code>, or an <code>EventSource</code> even if some future edit accidentally tried to. There is no analytics script, no form endpoint, no font CDN, and no third-party embed to weaken it.</p>
+<p>Exports and imports are handled entirely inside the page: files are produced with <code>Blob</code> and a local object URL, and imports are read with <code>FileReader</code> from a file you select. Both are file-system operations, not requests. The consequence to be honest about is the flip side: nothing is backed up, and clearing site data destroys the records permanently.</p>
+<p><a href="/">Return to the questionnaire →</a> · <a href="/methodology">Methodology and sources →</a></p>
+</section>
+
+</main>
+<footer>
+<p>Version 2.1 · reviewed 29 August 2026 · unvalidated demonstration.</p>
+<p><a href="/">Questionnaire</a> · <a href="/methodology">Interpretation limits</a> · <a href="/privacy">Local data details</a></p>
+</footer>
+</body>
+</html>

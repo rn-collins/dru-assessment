@@ -1,1 +1,140 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cannabis–Healthcare Conversation Questionnaire Sandbox</title><meta name="description" content="An unvalidated, browser-local demonstration of pseudonymously linked questionnaire records."><link rel="canonical" href="https://dru-assessment.vercel.app/"><link rel="icon" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><meta property="og:title" content="Cannabis–Healthcare Conversation Questionnaire Sandbox"><meta property="og:description" content="An unvalidated, browser-local demonstration of pseudonymously linked pre/post questionnaire records."><meta property="og:type" content="website"><meta property="og:url" content="https://dru-assessment.vercel.app/"><meta property="og:image" content="https://dru-assessment.vercel.app/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="stylesheet" href="/styles.css"><script type="module" src="/app.js"></script></head><body><a class="skip" href="#main">Skip to questionnaire</a><header><p class="eyebrow">Local demonstration · not research</p><h1>Cannabis–Healthcare Conversation Questionnaire Sandbox</h1><p>Answer six questions about talking to a clinician about cannabis, before and after something changes. Each record is filed under a short code you choose, so a later record can sit next to an earlier one — and everything stays in this browser.</p><nav><a href="/methodology">Methodology &amp; sources</a><a href="/privacy">Privacy</a></nav></header><main id="main" tabindex="-1"><section class="notice"><h2>What this demonstration is, and is not</h2><p>It is a workflow sketch. It does not evaluate an educational intervention or establish knowledge gain, effectiveness, behavior change, causation, clinical safety, or publication-ready evidence, and it gives no clinical advice. The six items are standalone indicators: none of them is part of a composite score.</p><p>Records are <strong>pseudonymously linked on this device</strong> using a code, phase, and timestamp. Anyone who knows the code or accesses this browser/export may link records. This is not anonymous.</p><label class="check"><input id="ack" type="checkbox"> I choose to use this local-storage demonstration and understand this is not consent to research or clinical care.</label></section><section class="setup"><h2>Questionnaire record</h2><label>Linkage code <input id="code" maxlength="8" pattern="[A-Z0-9]{8}" autocomplete="off" placeholder="8 letters/numbers"></label><button id="generate" type="button">Generate code</button><fieldset><legend>Phase</legend><label><input type="radio" name="phase" value="pre" checked> Pre</label><label><input type="radio" name="phase" value="post"> Post</label></fieldset><p id="error" role="alert"></p></section><form id="survey"><div id="items"></div><button type="submit">Save local record</button></form><section><h2>Local records</h2><p id="status" role="status" aria-live="polite"></p><div id="records"></div><div class="actions"><button id="export" type="button">Export self-describing JSON</button><button id="clear" type="button" class="danger">Delete all local records</button></div></section></main><footer><p>Version 2.0 · reviewed 20 August 2026 · unvalidated demonstration.</p><a href="/methodology">Interpretation limits</a> · <a href="/privacy">Local data details</a></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cannabis–Healthcare Conversation Questionnaire Sandbox</title>
+<meta name="description" content="An unvalidated, browser-local demonstration of pseudonymously linked pre/post questionnaire records — and an explanation of what that design can and cannot show.">
+<link rel="canonical" href="https://dru-assessment.vercel.app/">
+<link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:title" content="Cannabis–Healthcare Conversation Questionnaire Sandbox">
+<meta property="og:description" content="An unvalidated, browser-local demonstration of pseudonymously linked pre/post questionnaire records.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dru-assessment.vercel.app/">
+<meta property="og:image" content="https://dru-assessment.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cannabis–Healthcare Conversation Questionnaire Sandbox — six standalone indicators, filed under a linkage code.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/styles.css">
+<script type="module" src="/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to questionnaire</a>
+
+<header>
+<p class="eyebrow">Local demonstration · not research</p>
+<h1>Cannabis–Healthcare Conversation Questionnaire Sandbox</h1>
+<p class="lede">Answer six questions about talking to a clinician about cannabis, before and after something changes. Each record is filed under a short code you choose, so a later record can sit next to an earlier one — and everything stays in this browser.</p>
+<div class="rail">
+  <div><span>Instrument</span><b>cannabis-healthcare-conversation-sandbox</b></div>
+  <div><span>Version</span><b>2.1 · unvalidated</b></div>
+  <div><span>Items</span><b>6 standalone indicators</b></div>
+  <div><span>Linkage</span><b>Pseudonymous code + phase</b></div>
+  <div><span>Storage</span><b>This browser only</b></div>
+  <div><span>Network calls</span><b>None — blocked at the header</b></div>
+</div>
+<nav aria-label="Documentation">
+  <a href="/methodology">Methodology &amp; sources</a>
+  <a href="/design">Why it is built this way</a>
+  <a href="/privacy">Privacy</a>
+</nav>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section class="notice">
+<h2>What this demonstration is, and is not</h2>
+<p>It is a workflow sketch. It does not evaluate an educational intervention or establish knowledge gain, effectiveness, behavior change, causation, clinical safety, or publication-ready evidence, and it gives no clinical advice. The six items are standalone indicators: none of them is part of a composite score.</p>
+<p>Records are <strong>pseudonymously linked on this device</strong> using a code, phase, and timestamp. Anyone who knows the code or accesses this browser/export may link records. This is not anonymous.</p>
+<label class="check"><input id="ack" type="checkbox"> I choose to use this local-storage demonstration and understand this is not consent to research or clinical care.</label>
+</section>
+
+<section>
+<h2>What the linkage design actually demonstrates</h2>
+<p>A questionnaire that only ever collects anonymous, unconnected responses can tell you what a group looked like at one moment. It can never tell you whether <em>the same person</em> answered differently later, because there is nothing tying the two answers together. That limitation is not a privacy feature — it is a measurement dead end.</p>
+<p>The alternative most systems reach for is an identity: a name, an email, an account. That solves the linkage problem by creating a much larger one, because now the record is directly attributable and every downstream copy carries a person's identity with it.</p>
+<p>This sandbox demonstrates the third option, the one used in most pre/post survey research: a <strong>participant-generated linkage code</strong>. You invent an eight-character code, you use it twice, and the two records become a pair. The instrument never learns who you are, and it never has to.</p>
+
+<div class="ruled">
+<h3>What a pair buys you</h3>
+<dl class="defs">
+  <dt>Within-person comparison instead of between-group comparison</dt>
+  <dd>Two records under one code are the same respondent twice, so the comparison is not contaminated by the fact that different people answer differently to begin with. This is the entire reason the code exists.</dd>
+  <dt>Visible attrition</dt>
+  <dd>Codes with a PRE and no POST are countable. Unlinked collection hides that loss completely, and the people who drop out are rarely a random sample of the people who started.</dd>
+  <dt>A record you can carry without carrying your name</dt>
+  <dd>The export is complete enough to hand to someone else, and contains no identifier the instrument did not receive from you.</dd>
+</dl>
+</div>
+
+<div class="ruled">
+<h3>What a pair does not buy you</h3>
+<p>A transition from “Somewhat disagree” to “Agree” on one item is a description of two answers. It is not evidence that anything worked. At minimum, four rival explanations survive, and this design rules out none of them:</p>
+<dl class="defs">
+  <dt>Response shift</dt>
+  <dd>The respondent's internal yardstick for the question moved. Someone who learns how much they did not know can rate their own preparedness <em>lower</em> after a genuinely useful conversation — a documented contaminant of pre/post self-report (Howard &amp; Dailey, 1979; Sprangers &amp; Schwartz, 1999).</dd>
+  <dt>Testing effect</dt>
+  <dd>Answering the six items the first time is itself an exposure. It draws attention to interactions, disclosure, and timing, and can move the second answer with no other intervention at all.</dd>
+  <dt>Social-desirability bias</dt>
+  <dd>Intention and comfort items on a sensitive topic invite the answer the respondent believes is expected, and the pressure is not necessarily equal before and after (Krumpal, 2013).</dd>
+  <dt>Everything else that happened in between</dt>
+  <dd>No control condition, no randomization, no fixed interval, no exposure record. Any event in the gap is a candidate cause, and regression to the mean alone will move extreme first answers back toward the middle (Barnett et al., 2004).</dd>
+</dl>
+<p class="small"><a href="/design">Read the full design rationale, including a worked example of one pair →</a></p>
+</div>
+</section>
+
+<section class="setup">
+<h2>Questionnaire record</h2>
+<p class="small muted">Choose a code you can reproduce later, or generate one. Use the same code for both phases; use a different code for a different respondent.</p>
+<label for="code">Linkage code <input id="code" maxlength="8" pattern="[A-Z0-9]{8}" autocomplete="off" placeholder="8 letters/numbers" aria-describedby="code-help"></label>
+<p id="code-help" class="small muted">Eight characters, letters and digits. Never use a name, a date of birth, initials plus a birthday, or a medical-record number.</p>
+<button id="generate" type="button" class="quiet">Generate code</button>
+<fieldset>
+  <legend>Phase</legend>
+  <label><input type="radio" name="phase" value="pre" checked> Pre — before whatever you are marking</label>
+  <label><input type="radio" name="phase" value="post"> Post — after it</label>
+</fieldset>
+<p id="error" role="alert"></p>
+</section>
+
+<form id="survey">
+<h2>The six items</h2>
+<p class="small muted">Each item stands alone. They are not summed, averaged, or converted to a score anywhere in this tool.</p>
+<div id="items"></div>
+<button type="submit">Save local record</button>
+</form>
+
+<section>
+<h2>Local records</h2>
+<p id="status" role="status" aria-live="polite"></p>
+<div id="records"></div>
+</section>
+
+<section id="pairsection">
+<h2>Paired records</h2>
+<p class="small muted">Item-by-item label transitions for codes that have both a PRE and a POST record. Labels only — no total, no change score, no effect estimate.</p>
+<div id="pairs"></div>
+</section>
+
+<section>
+<h2>Take the records with you</h2>
+<p class="small muted">Everything below runs inside this page. Files are produced in the browser and never uploaded; importing reads a file you choose from your own device.</p>
+<div class="actions">
+  <button id="export" type="button">Export self-describing JSON</button>
+  <button id="exportCsv" type="button" class="quiet">Export CSV</button>
+  <button id="print" type="button" class="quiet">Print record sheet</button>
+  <button id="clear" type="button" class="danger">Delete all local records</button>
+</div>
+<label for="import">Import a previously exported JSON file <input id="import" type="file" accept="application/json,.json"></label>
+<p class="small muted">Imported records are validated against the same schema as stored ones. Anything malformed, duplicated, or out of range is discarded rather than repaired.</p>
+</section>
+
+</main>
+
+<footer>
+<p>Version 2.1 · reviewed 29 August 2026 · unvalidated demonstration. No analytics, no accounts, no server.</p>
+<p><a href="/methodology">Interpretation limits</a> · <a href="/design">Design rationale</a> · <a href="/privacy">Local data details</a></p>
+</footer>
+</body>
+</html>

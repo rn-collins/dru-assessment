@@ -1,1 +1,10 @@
-{"name":"dru-assessment","version":"2.0.0","private":true,"type":"module","scripts":{"test":"node --test","build":"node --test"}}
+{
+  "name": "dru-assessment",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "build": "node --test"
+  }
+}

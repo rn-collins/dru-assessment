@@ -1,1 +1,106 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Methodology · Questionnaire Sandbox</title><meta name="description" content="Interpretation limits for the questionnaire sandbox: six standalone indicators, descriptive pre/post pairing only, and no effectiveness or causal claim."><meta property="og:title" content="Methodology"><meta property="og:description" content="Interpretation limits for the questionnaire sandbox: six standalone indicators, descriptive pre/post pairing only, and no effectiveness or causal claim."><meta property="og:type" content="article"><meta property="og:url" content="https://dru-assessment.vercel.app/methodology"><meta property="og:image" content="https://dru-assessment.vercel.app/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="icon" href="/favicon.svg"><link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="/styles.css"><link rel="canonical" href="https://dru-assessment.vercel.app/methodology"></head><body><main id="main"><h1>Methodology and interpretation limits</h1><p>This is an unvalidated workflow demonstration. The six items are standalone indicators of perceived knowledge, rationale, comfort, expectation, preparedness, and intention. They are not a unidimensional scale and must not be summed, averaged, or interpreted as factual knowledge or behavior.</p><p>Pre/post linkage permits only descriptive item-label transitions for exact pairs. It does not estimate effectiveness or causation and does not control for exposure, timing, attrition, response shift, testing effects, or social-desirability bias.</p><p>Cannabis interactions vary by cannabinoid, product, amount, route, frequency, timing, concomitant medicine, and person. Discussion may help a clinician assess interactions, adverse effects, sedation or impairment, and care context; this site gives no clinical advice.</p><h2>Authoritative background</h2><ul><li><a href="https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis">FDA consumer information on cannabis products</a></li><li><a href="https://www.nccih.nih.gov/health/cannabis-marijuana-and-cannabinoids-what-you-need-to-know">NCCIH: cannabis and cannabinoids</a></li></ul><p>Sources and wording reviewed 20 August 2026.</p><p><a href="/">Return to questionnaire</a></p></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Methodology · Questionnaire Sandbox</title>
+<meta name="description" content="Interpretation limits for the questionnaire sandbox: six standalone indicators, descriptive pre/post pairing only, no composite score, and no effectiveness or causal claim.">
+<meta property="og:title" content="Methodology">
+<meta property="og:description" content="Interpretation limits for the questionnaire sandbox: six standalone indicators, descriptive pre/post pairing only, and no effectiveness or causal claim.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dru-assessment.vercel.app/methodology">
+<meta property="og:image" content="https://dru-assessment.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Methodology and interpretation limits for the questionnaire sandbox.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="icon" href="/favicon.svg">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/styles.css">
+<link rel="canonical" href="https://dru-assessment.vercel.app/methodology">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header>
+<p class="eyebrow">Methodology</p>
+<h1>Methodology and interpretation limits</h1>
+<p class="lede">This is an unvalidated workflow demonstration. The six items are standalone indicators of perceived knowledge, rationale, comfort, expectation, preparedness, and intention. They are not a unidimensional scale and must not be summed, averaged, or interpreted as factual knowledge or behavior.</p>
+<div class="rail">
+  <div><span>Items</span><b>6, standalone</b></div>
+  <div><span>Response format</span><b>4 ordered labels + opt-out</b></div>
+  <div><span>Scoring</span><b>None</b></div>
+  <div><span>Reviewed</span><b>29 August 2026</b></div>
+</div>
+<nav aria-label="Documentation"><a href="/">Return to questionnaire</a> <a href="/design">Design rationale</a> <a href="/privacy">Privacy</a></nav>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section>
+<h2>The six items and what each one is</h2>
+<p>Every item is written as a separate indicator with its own meaning. None of them is a proxy for another, and there is no construct that all six are supposed to measure together.</p>
+<dl class="defs">
+  <dt>1 · Perceived interaction knowledge</dt>
+  <dd>Whether the respondent <em>believes</em> cannabis products may interact with medicines. This is a perception item. It does not test factual knowledge, and a confident wrong answer and a confident right answer are indistinguishable here.</dd>
+  <dt>2 · Perceived disclosure rationale</dt>
+  <dd>Whether the respondent understands why product, amount, route, frequency, and timing might matter in a clinical conversation. Again a perception, not a comprehension test.</dd>
+  <dt>3 · Discussion comfort</dt>
+  <dd>Anticipated affect. Comfort reported in a browser is not comfort experienced in an appointment.</dd>
+  <dt>4 · Anticipated clinician response</dt>
+  <dd>An expectation about someone else's behavior. It measures the respondent's prediction, not what any clinician would actually do.</dd>
+  <dt>5 · Conversation preparedness</dt>
+  <dd>Self-assessed readiness. The item most exposed to response shift, because learning what a good disclosure contains can lower a person's rating of their own readiness.</dd>
+  <dt>6 · Discussion intention</dt>
+  <dd>A stated intention. The intention–behavior gap is the standard caution here: an intention recorded on a form is not an action taken in a clinic, and this item is also the most exposed to social-desirability pressure.</dd>
+</dl>
+</section>
+
+<section>
+<h2>Response format, and why nothing is added up</h2>
+<p>Each item offers four ordered labels — Disagree, Somewhat disagree, Somewhat agree, Agree — plus an explicit “Not sure / prefer not to answer”, which is stored as a missing value rather than a midpoint. There is no neutral middle option, so the opt-out is not doing double duty as “neither”.</p>
+<p>The four labels are <strong>ordinal</strong>: they have an order but no established spacing. Storing them as 0–3 is a convenience for validation, not a measurement claim, and the tool never adds, averages, or differences those integers. Analysing ordinal responses with metric models is a documented source of confident error, including inflated and deflated effects and outright sign reversals in which the analysis reports the opposite of the pattern in the data (Liddell &amp; Kruschke, 2018). The export declares <code>ordinal: true</code> and <code>noCompositeScore: true</code> so that a downstream reader inherits the constraint rather than discovering it.</p>
+</section>
+
+<section>
+<h2>What pre/post pairing supports</h2>
+<p>Pre/post linkage permits only descriptive item-label transitions for exact pairs. It does not estimate effectiveness or causation and does not control for exposure, timing, attrition, response shift, testing effects, or social-desirability bias.</p>
+<p>The threats are specific and each has a literature:</p>
+<ul>
+<li><strong>Response shift</strong> — the respondent's internal standard for the question changes between measurements, so the two answers are not on the same yardstick (Howard &amp; Dailey, 1979; Sprangers &amp; Schwartz, 1999).</li>
+<li><strong>Testing effects</strong> — completing the questionnaire is itself an exposure that can change the second response.</li>
+<li><strong>Social-desirability bias</strong> — sensitive-topic items pull toward the answer the respondent believes is wanted (Krumpal, 2013).</li>
+<li><strong>Regression to the mean</strong> — extreme first responses tend to be followed by less extreme ones for purely statistical reasons (Barnett et al., 2004).</li>
+<li><strong>Attrition</strong> — codes with a PRE and no POST are visible in this tool, but their absence is not random and is not correctable here.</li>
+</ul>
+<p>A fuller treatment, with a worked example of reading a single pair, is on the <a href="/design">design rationale page</a>.</p>
+</section>
+
+<section>
+<h2>Clinical framing</h2>
+<p>Cannabis interactions vary by cannabinoid, product, amount, route, frequency, timing, concomitant medicine, and person. Discussion may help a clinician assess interactions, adverse effects, sedation or impairment, and care context; this site gives no clinical advice, and nothing here should delay or replace a conversation with a qualified professional.</p>
+<h3>Authoritative background</h3>
+<ul>
+<li><a href="https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis">FDA — What You Need to Know (And What We're Working to Find Out) About Products Containing Cannabis or Cannabis-Derived Compounds</a></li>
+<li><a href="https://www.nccih.nih.gov/health/cannabis-marijuana-and-cannabinoids-what-you-need-to-know">NCCIH — Cannabis (Marijuana) and Cannabinoids: What You Need To Know</a></li>
+</ul>
+</section>
+
+<section>
+<h2>Methodological references</h2>
+<ol class="small">
+<li>Howard, G. S., &amp; Dailey, P. R. (1979). Response-shift bias: A source of contamination of self-report measures. <em>Journal of Applied Psychology</em>. <a href="https://doi.org/10.1037/0021-9010.64.2.144">doi:10.1037/0021-9010.64.2.144</a></li>
+<li>Sprangers, M. A. G., &amp; Schwartz, C. E. (1999). Integrating response shift into health-related quality of life research: a theoretical model. <em>Social Science &amp; Medicine</em>. <a href="https://doi.org/10.1016/S0277-9536(99)00045-3">doi:10.1016/S0277-9536(99)00045-3</a></li>
+<li>Krumpal, I. (2013). Determinants of social desirability bias in sensitive surveys: a literature review. <em>Quality &amp; Quantity</em>. <a href="https://doi.org/10.1007/s11135-011-9640-9">doi:10.1007/s11135-011-9640-9</a></li>
+<li>Barnett, A. G., van der Pols, J. C., &amp; Dobson, A. J. (2004). Regression to the mean: what it is and how to deal with it. <em>International Journal of Epidemiology</em>. <a href="https://doi.org/10.1093/ije/dyh299">doi:10.1093/ije/dyh299</a></li>
+<li>Liddell, T. M., &amp; Kruschke, J. K. (2018). Analyzing ordinal data with metric models: What could possibly go wrong? <em>Journal of Experimental Social Psychology</em>. <a href="https://doi.org/10.1016/j.jesp.2018.08.009">doi:10.1016/j.jesp.2018.08.009</a></li>
+<li>Regulation (EU) 2016/679 (General Data Protection Regulation), Article 4(5), definition of pseudonymisation. <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">Official Journal text</a></li>
+</ol>
+<p class="small muted">Sources and wording reviewed 29 August 2026.</p>
+<p><a href="/">Return to questionnaire →</a></p>
+</section>
+
+</main>
+<footer>
+<p>Version 2.1 · unvalidated demonstration · no analytics, no accounts, no server.</p>
+<p><a href="/">Questionnaire</a> · <a href="/design">Design rationale</a> · <a href="/privacy">Local data details</a></p>
+</footer>
+</body>
+</html>

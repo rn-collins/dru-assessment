@@ -8,6 +8,10 @@
     {
       "source": "/methodology",
       "destination": "/methodology.html"
+    },
+    {
+      "source": "/design",
+      "destination": "/design.html"
     }
   ],
   "headers": [
